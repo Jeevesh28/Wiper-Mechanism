@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example V.PA</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="V.PA" width="225" height="255"></canvas>
+<script type="application/javascript">
+parallelogramPD = new PrairieDraw("V.PA", function() {
+	this.addOption("parallelogram",false);
+	
+	this.setUnits(4, 4);
+	this.setProp("arrowLineWidthPx",2);
+	
+	this.translate($V([-1.5,-0.5,0]));
+	
+	var O = $V([0,0]);
+	var P = $V([2,0]);
+	var Q = $V([3,1]);
+	
+
+	this.arrow(O, Q);
+	this.text($V([1.75,0.9]), $V([1,1]), "w = u + v");
+	
+	if (this.getOption("parallelogram")) {
+		var R = $V([1,1]);
+		
+		this.arrow(O, R);
+		this.arrow(R, Q);
+		this.text($V([0.2, 0.6]), $V([-1,0]), "v");
+		this.text($V([1.75, 1]), $V([-1,-1]), "u");
+	}
+	else {
+		this.arrow(O, P);
+		this.arrow(P, Q);
+		this.text($V([0.9,-0.35]), $V([-1,-1]), "u");
+		this.text($V([2.5,0.35]), $V([-1,0]), "v");
+	}
+});
+</script>
+<p><button onclick="parallelogramPD.toggleOption('parallelogram');">See Other Side of Parallelogram</button>
+<p>
+
+</body>

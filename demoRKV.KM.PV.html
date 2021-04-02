@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example RKV KM.PV</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="KM.PV" width="300" height="225"></canvas>
+<script type="application/javascript">
+mixPD = new PrairieDrawAnim("KM.PV", function(t) {
+	this.addOption("ij", true);
+	this.addOption("ab", false);
+
+	this.setUnits(3, 2.5);
+	this.setProp("arrowLineWidthPx",2);
+	this.translate($V([0, -0.75]));
+	
+	var O = $V([0,0]);
+	var P = $V([1,1.5]);
+	var diff = $V([-1.25, 0.75]);
+
+	if(this.getOption("ab")){
+		this.save();
+			this.translate(diff);
+			
+			//this.setProp("arrowLineWidthPx",0.5);
+			//this.arrow($V([-5,O.e(1)]), $V([5,O.e(2)]));
+			//this.arrow($V([O.e(1),-5]), $V([O.e(2),5]));
+			
+			this.arrow(O, $V([0,1]));
+			this.arrow(O, $V([1,0]));
+			
+			this.text($V([1, -0.1]), O, "a");
+			this.text($V([-0.1, 1]), O, "b");
+			
+			this.point(O);
+			this.text($V([-.075,-.075]), O, "O'")
+		this.restore();
+		this.arrow(O.add(diff), P, "position");
+	}
+	if(this.getOption("ij")){
+		//this.setProp("arrowLineWidthPx",0.5);
+		//this.arrow($V([-5,O.e(1)]), $V([5,O.e(2)]));
+		//this.arrow($V([O.e(1),-5]), $V([O.e(2),5]));
+		
+		this.arrow(O, $V([0,1]));
+		this.arrow(O, $V([1,0]));
+		
+		this.text($V([1, -0.1]), O, "i");
+		this.text($V([-0.1, 1]), O, "j");
+		
+		this.point(O);
+		this.text($V([-.05,-.05]), O, "O")
+		this.arrow(O,P, "position");
+	}
+
+	this.point(P);
+	this.text(P.add($V([.075, .075])), O, "P");
+
+});
+</script>
+<p>
+<button onclick="mixPD.toggleOption('ij');">Toggle O Coordinate System</button>
+<button onclick="mixPD.toggleOption('ab');">Toggle O' Coordinate System</button>
+<p>
+
+</body>

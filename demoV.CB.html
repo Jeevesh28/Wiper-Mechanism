@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example V.CB</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="V.CB" width="300" height="225"></canvas>
+<script type="application/javascript">
+componentsPD = new PrairieDraw("V.CB", function() {
+	this.addOption("components",false);
+	this.addOption("ij",true);
+	this.addOption("ab",false);
+	
+	this.setUnits(3, 2.5);
+	this.setProp("arrowLineWidthPx",2);
+
+	this.translate($V([-.5,-1]));
+
+	var O = $V([0,0]);
+	var P = $V([1,2]);
+	
+	this.arrow(O, P, "position");
+	this._ctx.fillStyle="blue";
+	this.text($V([1.25, 2.25]), $V([1,1]), "w = u + v");
+	this._ctx.fillStyle="black";
+
+	if(this.getOption("ij")){
+		this._ctx.fillStyle="black";
+		this.setProp("arrowLineWidthPx",2);
+		this.arrow($V([0,0]), $V([1,0]));
+		this.text($V([1,0.1]), $V([1,0]), "i");
+		this.arrow($V([0,0]), $V([0,1]));
+		this.text($V([0.07,1]), $V([0,1]), "j");
+	}
+
+	if(this.getOption("ab")){
+		this._ctx.fillStyle="black";
+		this.setProp("arrowLineWidthPx",2);
+		this.save();
+			this.rotate(Math.PI/4);
+			this.arrow($V([0,0]), $V([1,0]));
+			this.text($V([1,0.03]), $V([1,0]), "a");
+			this.arrow($V([0,0]), $V([0,1]));
+			this.text($V([0.15,1]), $V([0,1]), "b");
+		this.restore();
+	}
+	
+	if (this.getOption("components")) {
+		this._ctx.fillStyle="blue";
+		this.setProp("arrowLineWidthPx",1);
+		if(this.getOption("ij")){
+			this.arrow(O, $V([P.e(1), 0]), "position");
+			this.arrow(O, $V([0, P.e(2)]), "position");
+			this.text($V([0.5,-0.2]), $V([1,-1]), "u");
+			this.text($V([-0.1,1]), $V([0,1]), "v");
+		}
+		if(this.getOption("ab")){
+			this.save();
+				this.rotate(Math.PI/4);
+				this.arrow(O, $V([P.e(2), 0]), "position");
+				this.arrow(O, $V([0, P.e(1)]), "position");
+				this.text($V([1,-0.2]), $V([1,-1]), "v");
+				this.text($V([-0.02,0.5]), $V([0,1]), "u");
+			this.restore();
+		}
+    }
+
+});
+</script>
+<p>
+<button onclick="componentsPD.toggleOption('components');">See Components</button>
+<button onclick="componentsPD.toggleOption('ij');">Toggle i,j Basis</button>
+<button onclick="componentsPD.toggleOption('ab');">Toggle a,b Basis</button>
+<p>
+
+</body>

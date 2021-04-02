@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example V.CV</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="V.CV" width="225" height="225"></canvas>
+<script type="application/javascript">
+var P = $V([Math.sqrt(2), Math.sqrt(2)]);
+var length = 2;
+var angle = Math.PI/4;
+var tLengthen = 0, tRotate = 0;
+componentsPD = new PrairieDrawAnim("V.CV", function(t) {
+	this.addOption("components",false);
+	this.addOption("rotate",false);
+	this.addOption("lengthen",false);
+	
+	this.setUnits(5, 5);
+	this.setProp("arrowLineWidthPx",2);
+
+	if(this.getOption("lengthen")){
+		length = 2 + Math.sin(tLengthen)/2;
+		if (!this._running)
+			this.startAnim();
+		if(t!=0)
+			tLengthen += .02;
+	}
+	
+	if(this.getOption("rotate")){
+		angle = tRotate+Math.PI/4;
+		if (!this._running)
+			this.startAnim();
+		if(t!=0)
+			tRotate += .02;
+	}
+	
+	if(!this._running && ((this.getOption("lengthen") && !this.getOption("rotate"))
+	   || (!this.getOption("lengthen") && this.getOption("rotate"))))
+		this.stopAnim();
+	
+	var O = $V([0, 0]);
+	var P = $V([length * Math.cos(angle),  length * Math.sin(angle)]);
+	
+	this._ctx.fillStyle="blue";
+	
+	if(this.getOption("components")){
+		this.setProp("arrowLineWidthPx", 1);
+		this.arrow(O, $V([P.e(1), 0]), "position");
+		this.text($V([P.e(1)/2, -0.3]), $V([-1,-1]), "u");
+		this.arrow(O, $V([0, P.e(2)]), "position");
+		this.text($V([-0.3, P.e(2)/2]), $V([-1,1]), "v");
+	}
+	
+	this.setProp("arrowLineWidthPx", 2);
+	this.arrow(O, P, "position");
+	this.text($V([P.e(1)+0.3, P.e(2)+0.3]), $V([1,1]), "w = u + v");
+	
+	this.setProp("arrowLineWidthPx", 1.5);
+	this._ctx.fillStyle="black";
+	this.arrow($V([0,0]), $V([1,0]));
+	this.text($V([1,0.1]), $V([1,0]), "i");
+	this.arrow($V([0,0]), $V([0,1]));
+	this.text($V([0.1,1]), $V([0,1]), "j");
+	
+});
+</script>
+<p><button onclick="componentsPD.toggleOption('components');">See Components</button>
+<button onclick="componentsPD.toggleOption('rotate');">Rotate Vector</button>
+<button onclick="componentsPD.toggleOption('lengthen');">Lengthen Vector</button>
+<p>
+
+</body>

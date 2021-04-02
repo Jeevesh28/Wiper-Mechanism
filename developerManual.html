@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>PrairieDraw.js Developer Manual</title>
+</head>
+<body>
+
+<h1>PrairieDraw.js Developer Manual</h1>
+
+<p>Other sources of information are the <a href="">Reference
+Manual</a>, the <a href="userManual.html">User Manual</a>, and the <a
+href="http://sylvester.jcoglan.com/docs.html">Sylvester Docs</a> for
+vectors and matrices.</p>
+
+<h2>Coding style</h2>
+
+<p>We use standard JavaScript <a
+href="https://en.wikipedia.org/wiki/Prototype-based_programming">prototypal
+inheritance</a> for the objects.</p>
+
+<p>Instance variables and member functions starting with an underscore
+are understood to be private and for internal use only. Apart from
+this, we follow <a
+href="https://en.wikipedia.org/wiki/Naming_convention_%28programming%29#Java">Java
+naming conventions</a>.</p>
+
+<p>We use <a href="https://en.wikipedia.org/wiki/JSDoc">JSDoc</a> for
+inline documentation (particularly <a
+href="https://code.google.com/p/jsdoc-toolkit/">jsdoc-toolkit</a>).</p>
+
+<h2><code>draw()</code> and <code>redraw()</code></h2>
+
+<p>The user-supplied anonymous function in the constructor call is
+bound to the member function <code>draw()</code>. This should not
+generally be called explicitly, however. Instead,
+<code>redraw()</code> should be called, which is overridden by the
+<code>PrairieDrawAnim</code> child.</p>
+
+<h2>Coordinate systems</h2>
+
+<p>There are three coordinate systems used: Dw is <em>drawing
+coordinates</em> and is used for positions and vectors, Px is
+<em>pixel coordinates</em> and is used for line widths, arrow sizes,
+etc, and Nm is <em>normalized coordinates</em> for referencing
+locations within the viewport. The transformation from Dw to Px is
+stored in the <code>_trans</code> instance variable. This is an <a
+href="https://en.wikipedia.org/wiki/Affine_transformation">affine
+transformation matrix</a> (using <a
+href="https://en.wikipedia.org/wiki/Homogeneous_coordinates">homogeneous
+coordinates</a>). The transformation matrix is pushed/popped from a
+transformation stack by
+<code>save()</code>/<code>restore()</code>.</p>
+
+<p>To convert from Dw to Px coordinates we use <code>pos2Px</code>
+(for positions) and <code>vec2Px</code> (for vectors). The vector
+transformation only uses the linear part of the affine
+transformation. The inverse transforms are <code>pos2Dw</code> and
+<code>vec2Dw</code>. Similarly, <code>posNm2Dw</code> and
+<code>posNm2Px</code> convert normalized coordinate positions to the
+other coordinate systems.</p>
+
+<p>All PrairieDraw functions should leave the 2D Canvas coordinate
+system unmodified, so we should do a <code>_ctx.save()</code> and
+<code>_ctx.restore()</code> around any canvas coordinate
+transformations.</p>
+
+<p>In the code, variables are suffixed with either <code>Dw</code>,
+<code>Px</code>, or <code>Nm</code> to indicate which coordinate
+system they are in.</p>
+
+<h2>Properties, colors, and options</h2>
+
+<p>Drawing properties are stored in the <code>_props</code> instance
+variable object and pushed/popped from a stack by
+<code>save()</code>/<code>restore()</code>. Properties include colors
+to indicate standard types of objects. Object drawing functions (like
+<code>rod()</code>, <code>pivot()</code>, etc.) should set all
+appropriate style and color properties from <code>_props</code> data
+and should clear them before exit.</p>
+
+<p>Options stored in the <code>_options</code> instance variable
+object are for user-created options. These are <em>not</em>
+push/popped by <code>save()</code>/<code>restore()</code>, as they
+need to persist across multiple <code>draw()</code> invocations.</p>
+
+<p>Calling <code>setOption()</code> or <code>setProp()</code> triggers
+a <code>redraw()</code>.</p>
+
+<h2>Animation</h2>
+
+<p>There are three times used for animation by the
+<code>PrairieDrawAnim</code> child class: wall-time in milliseconds,
+animation time in milliseconds, and animation time in seconds.</p>
+
+<p>Animation is implemented using
+<code>requestAnimationFrame()</code>, which calls
+<code>_callback()</code> with the wall-time in milliseconds. We offset
+by the <code>_timeOffset</code> instance variable to obtain the
+current animation time in milliseconds. This allows for the animation
+to be paused and restarted without skipping. The
+<code>_startFrame</code> instance variable set to <code>true</code>
+when animation begins, which triggers the recalculation of
+<code>_timeOffset</code>.</p>
+
+<p>The <code>_drawTime</code> instance variable stores the animation
+time in milliseconds of the last <code>draw()</code> call, for use by
+<code>redraw()</code> when the animation is not running.</p>
+
+<p>The user-supplied <code>draw(t)</code> function is called with time
+<code>t</code> being the animation time in seconds.</p>
+
+</body>
+</html>

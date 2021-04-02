@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example V.DV</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="V.DV" width="200" height="200"></canvas>
+<script type="application/javascript">
+derivativePD = new PrairieDrawAnim("V.DV", function(t) {
+	this.addOption("derivative",false);
+	
+	this.setUnits(4, 4);
+	this.setProp("arrowLineWidthPx",2);
+	
+	var O = $V([0,0]);
+	var P = $V([2,2]);
+	
+	this.line(O,P, "dashed");
+	
+	if(this.getOption("derivative")){
+		
+	}
+});
+</script>
+<p>
+<button onclick="derivativePD.toggleAnim();">Toggle Animation</button>
+<button onclick="derivativePD.toggleOption('derivative');">See Derivative</button>
+<p>
+
+</body>

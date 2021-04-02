@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example V.RB</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="V.RB" width="225" height="225"></canvas>
+<script type="application/javascript">
+componentsPD = new PrairieDrawAnim("V.RB", function(t) {
+	this.addOption("components",false);
+	
+	this.setUnits(4, 4);
+	this.setProp("arrowLineWidthPx",2);
+	
+	var x_axis = $V([Math.cos(t/2), Math.sin(t/2)]).x(4);
+	var y_axis = $V([Math.cos(t/2+Math.PI/2), Math.sin(t/2+Math.PI/2)]).x(4);
+	var O = $V([0, 0]);
+	var P = $V([Math.sqrt(2), Math.sqrt(2)]);
+	
+	this._ctx.fillStyle="black";
+	this.setProp("arrowLineWidthPx",2);
+	this.arrow(O, P, "position");
+	this.text($V([P.e(1)+0.5, P.e(2)+0.5]), $V([1,1]), "w = u + v");
+	
+	//AXES
+	this.setProp("arrowLineWidthPx",2);
+	this.arrow(O, x_axis.x(.5));
+	this.text($V([x_axis.e(1)/2.55, x_axis.e(2)/2.55]), $V([-1,-1]), "i");
+	this.arrow(O, y_axis.x(.5));
+	this.text($V([y_axis.e(1)/2.55 - 0.2, y_axis.e(2)/2.55]), $V([0,-1]), "j");
+	
+	if(this.getOption("components")){
+		this.setProp("arrowLineWidthPx",1);
+		this._ctx.fillStyle="blue";
+		this.arrow(O, ellipse(t, "x"), "position");
+		this.text($V([ellipse(t, "x").e(1)/2, ellipse(t, "x").e(2)/2 - 0.2]), $V([1,0]), "u");
+		this.arrow(O, ellipse(t, "y"), "position");
+		this.text($V([ellipse(t, "y").e(1)/2 - 0.2, ellipse(t, "y").e(2)/2]), $V([0,1]), "v");
+	}
+	
+});
+function ellipse(t, axis){
+	if(axis=="x")
+		t = t-Math.PI/2;
+	else if(axis=="y")
+		t = t+Math.PI/2;
+	
+	x = Math.sqrt(2)/2 + 1*Math.cos(t)*Math.cos(Math.PI/4) - 1*Math.sin(t)*Math.sin(Math.PI/4);
+	y = Math.sqrt(2)/2 + 1*Math.cos(t)*Math.sin(Math.PI/4) + 1*Math.sin(t)*Math.cos(Math.PI/4);
+	return $V([x,y]);
+}
+</script>
+<p>
+<button onclick="componentsPD.toggleOption('components');">See Components</button>
+<button onclick="componentsPD.toggleAnim();">Change Basis</button>
+<p>
+
+</body>

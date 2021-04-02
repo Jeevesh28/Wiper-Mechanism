@@ -1,0 +1,18 @@
+Tasks for 7/10 - 7/25 iteration:
+
+1) Restyle previously made examples to fit new style as suggested in 7/10 meeting:
+	a) Resize canvas and rescale examples to fit better in lagrange site (see http://lagrange.mechse.illinois.edu/mwest/tam212/rvv.xhtml for examples)
+	b) Change basis vectors to be unit vectors
+	c) Work on getting LaTeX text in canvas working (start with email suggestion from Professor West, ask for help later?)
+	d) Redo changing basis examples to remove animations.  Make it so a button toggles between three states: first basis, second basis, and both bases.
+
+2) Create detailed application example for a Fourbar Linkage similar to Professor West's "Acceleration and Braking" example (see http://lagrange.mechse.illinois.edu/mwest/tam212/ava.xhtml for examples).
+
+Possible ideas:
+	a) A Watt's Linkage in the rear-suspension of a car (http://en.wikipedia.org/wiki/Watt's_linkage#Automobile_suspension)
+	b) Fourbar linkage used in a bike's suspension (http://en.wikipedia.org/wiki/Bicycle_suspension#Four-bar)
+	c) Watt's linkage in train-suspension (http://en.wikipedia.org/wiki/File:Suspension_train_watt.svg)
+
+3) Create webpage for use during the August 1 SIIP meeting.  Should include links to our best examples on the lagrange website.  Make sure links follow a logical path to highlight the new TAM 212 website (be sure to hit the Reference and Application pages).
+
+4) Continue making examples from "tam212.pdf" in SVN repository for the lagrange website.

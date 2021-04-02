@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Watts Example</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="watts" width="400" height="400"></canvas>
+<script type="application/javascript">
+
+animPD = new PrairieDrawAnim("watts", function(t) {
+	//SET UP PRAIRIEDRAW
+	this.setUnits(6, 6);
+	this.setProp("shapeStrokeWidthPx",1); //center line
+	this.line($V([0,-3]), $V([0,3]));
+	this.setProp("shapeStrokeWidthPx",2);
+	
+	//DRAW SIDES
+	this.setProp("arrowLineWidthPx",2);
+	this.ground($V([-2.5,0]), $V([1, 0]), 10); //left side
+	this.ground($V([2.5,0]), $V([-1, 0]), 10); //right side
+	
+	//DRAW PIVOTS
+	this.pivot($V([-2.5,-1.25]), $V([-2,-1.25]), 0.5);
+	this.pivot($V([2.5,1.25]), $V([2,1.25]), 0.5);
+	
+	//LEFT BAR
+	this.save();
+	this.translate($V([-2, -1.25]));
+	this.rotate(Math.sin(t)/1.5);
+	this.rod($V([0,0]), $V([2.5,0]), 0.25);
+	this.point($V([0,0]));
+	var left_end = this.pos2Px($V([2.5,0]));
+	this.restore();
+	
+	//RIGHT BAR
+	this.save();
+	this.translate($V([2, 1.25]));
+	this.rotate(-Math.sin(t)/1.5);
+	this.rod($V([0,0]), $V([-2.5,0]), 0.25);
+	this.point($V([0,0]));
+	var right_end = this.pos2Px($V([-2.5,0]));
+	this.restore();
+	
+	//DRAW MIDDLE LINK
+	var left_dw = this.pos2Dw(left_end);
+	var right_dw = this.pos2Dw(right_end);
+	this.rod(left_dw, right_dw, 0.25);
+	this.point(left_dw);
+	this.point(right_dw);
+	this.point($V([0, (left_dw.e(2)+right_dw.e(2))/2]));
+	
+})
+</script>
+<p>
+<button onclick="animPD.toggleAnim();">Toggle animation</button>
+</p>
+
+
+
+</body>

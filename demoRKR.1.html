@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Rotation Example</title>
+<script src="sylvester.js"></script>
+<script src="PrairieDraw.js"></script>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="rotation" width="225" height="225"></canvas>
+<script type="application/javascript">
+var tRotate = 0;
+animPD = new PrairieDrawAnim("rotation", function(t) {
+	//SET UP PRAIRIEDRAW
+	this.addOption("animate",false);
+	this.addOption("change",false);
+	
+	this.setUnits(4.5, 4.5);
+	this.arrow($V([0,0]), $V([1.5,0]));
+	this.text($V([1.4,-0.12]), $V([0,0]), "i");
+	this.arrow($V([0,0]), $V([0,1.5]));
+	this.text($V([-0.12,1.4]), $V([0,0]), "j");
+	
+	var O = $V([0, 0]);
+	if(this.getOption("animate")){
+		if (!this._running){
+			this.startAnim();
+			}
+		if(t!=0){
+			tRotate += .01;
+			}
+		}
+	else{
+		this.stopAnim();
+		}	
+	
+	if(this.getOption("change")){
+		if(this._running){
+			tRotate += .01;
+			this.circleArrow(O, 0.5, 0, Math.PI, "angMom");
+			}
+		}
+	else{
+		if(this._running){
+			this.circleArrow(O, 0.5, 0, Math.PI/2, "angMom");
+			}
+		}
+		
+	this.arrow(O, $V([2*Math.cos(2*tRotate+Math.PI/4), 2*Math.sin(2*tRotate+Math.PI/4)]), "position");
+	
+	
+	
+})
+</script>
+<p>
+<button onclick="animPD.toggleOption('animate');">Toggle animation</button>
+<button onclick="animPD.toggleOption('change');">Change angular velocity</button>
+</p>
+
+
+
+</body>
