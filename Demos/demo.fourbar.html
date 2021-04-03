@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Four Bar Example</title>
+
+		<script src="sylvester.js"></script>
+		<script src="PrairieDraw.js"></script>
+
+		<style>
+		canvas {
+			border: 1px solid black;
+		}
+		</style>
+	</head>
+
+	<body>
+
+	<canvas id="fourbar" width="400" height="400"></canvas>
+	<script type="application/javascript">
+	var omega = 1;
+	var length_bar1 = 1;
+	var length_bar2 = 26/18;
+	var length_bar3 = 2;
+	var length_base = 40/18;
+	var time = 0;
+
+	animPD = new PrairieDrawAnim("fourbar", function(t) {
+		time = t;
+		//SET UP PRAIRIEDRAW
+		this.setUnits(6, 6);
+		this.setProp("arrowLineWidthPx",2);
+		this.addOption("velocity",false);
+		this.addOption("acceleration",false);
+		
+		//LENGTH AND ANGLE CALCULATIONS
+		var A = t*omega; //"theta"
+		var AD = length_bar1; //length of left bar
+		var AB = length_base; //distance between two stationary pivots
+		var BC = length_bar3; //length of right bar
+		var CD = length_bar2; //length of middle bar
+		var BD = Math.sqrt(AD*AD + AB*AB - 2*AD*AB*Math.cos(A));
+		var C = Math.acos((BC*BC + CD*CD - BD*BD)/(2*BC*CD));
+		var ABD = Math.asin(CD * Math.sin(C) / BD);
+		var DBC = Math.asin(AD * Math.sin(A) / BD);
+		var B = ABD + DBC;
+		var D = Math.PI - B - C;
+		
+		//DRAW GROUND
+		var G = $V([0, -0.5]);
+		this.ground(G, $V([0, 1]), 10);
+		
+		//DRAW PIVOTS
+		var pivot_left = $V([AB/-2, 0]);
+		var pivot_right = $V([AB/2, 0]);
+		this.pivot($V([pivot_left.e(1), -0.5]), pivot_left, 0.5);
+		this.pivot($V([pivot_right.e(1), -0.5]), pivot_right, 0.5);
+
+		this.save();
+		//FIRST BAR
+		this.translate(pivot_left);
+		this.rotate(A);
+		this.rod($V([0,0]), $V([AD,0]), 0.25);
+		this.point($V([0,0]));
+
+		//SECOND BAR
+		this.translate($V([AD,0]));
+		this.rotate(A*-1); 	//"undo" the original A rotation
+		this.rotate(D);		//rotate by D only
+		this.rod($V([0,0]), $V([CD,0]), 0.25);
+		this.point($V([0,0]));
+		
+		//THIRD BAR
+		this.translate($V([CD,0]));
+		this.rotate(Math.PI+C);
+		this.rod($V([0,0]), $V([BC,0]), 0.25);
+		this.point($V([0,0]));
+		this.restore();
+		this.point($V([pivot_right.e(1), 0]));
+		
+		//DISPLAY GRASHOF'S LAW
+		this.text($V([0,-2.5]), $V([0,0]), grashofsLaw(AB, AD, BC, CD));
+		
+		//VELOCITY AND ACCELERATION
+		var computePosLeft = function(t) {
+			A = t*omega;
+			var dataNow = {};
+	dataNow.O = $V([0, 0]);
+			dataNow.P = this.vector2DAtAngle(A).x(AD);
+			return dataNow;
+		}
+		var dataLeft = this.numDiff(computePosLeft.bind(this), t);
+		
+		var computePosRight = function(t) {
+			//have to recompute these with the new t
+			A = t*omega;
+			C = Math.acos((BC*BC + CD*CD - (AD*AD + AB*AB - 2*AD*AB*Math.cos(A)))/(2*BC*CD));
+			B = Math.asin(CD * Math.sin(C) / BD) + Math.asin(AD * Math.sin(A) / BD);
+			D = Math.PI - B - C;
+		
+			var dataNow = {};
+			dataNow.O = $V([0,0]);
+			dataNow.P = (this.vector2DAtAngle(C+D)).x(BC);
+			return dataNow;
+		}
+		var dataRight = this.numDiff(computePosRight.bind(this), t);
+		
+		if (this.getOption("velocity")) {
+			this.save();
+				this.translate(pivot_left);
+				this.arrow(dataLeft.P, dataLeft.P.add(dataLeft.diff.P), "velocity");
+			this.restore();
+			
+			//this part doesn't appear to be right for some reason
+			this.save();
+				this.translate(pivot_right);
+				if(dataRight.diff.P.e(1) > 0.02 || dataRight.diff.P.e(1) < -0.02) //hack to keep it from jumping at 0
+					this.arrow(dataRight.P, dataRight.P.add(dataRight.diff.P), "velocity");
+			this.restore();
+		}
+		
+		if (this.getOption("acceleration")) {
+			this.save();
+				this.translate(pivot_left);
+				this.arrow(dataLeft.P, dataLeft.P.add(dataLeft.ddiff.P), "acceleration");
+			this.restore();
+			
+			this.save();
+				this.translate(pivot_right);
+				this.arrow(dataRight.P, dataRight.P.add(dataRight.ddiff.P), "acceleration");
+			this.restore();
+		}
+		
+	});
+
+	function grashofsLaw(bar1, bar2, bar3, bar4){
+		var bars = [bar1, bar2, bar3, bar4];
+		bars.sort();
+		var leftSide = (parseFloat(bars[0]) + parseFloat(bars[3])).toFixed(4);
+		var rightSide = (parseFloat(bars[1]) + parseFloat(bars[2])).toFixed(4);
+		
+		return "Grashof's Law: " + leftSide + " < " + rightSide;
+	}
+
+	function setOmega(value){
+		omega = document.getElementById('omegaslider').value;
+	}
+
+	function setBar1(value){
+		if(!animPD._running){
+			animPD.startAnim();
+			length_bar1 = document.getElementById('bar1slider').value;
+			animPD.stopAnim();
+		}
+		else{
+			length_bar1 = document.getElementById('bar1slider').value;
+		}
+	}
+
+	function setBar2(value){
+		if(!animPD._running){
+			animPD.startAnim();
+			length_bar2 = document.getElementById('bar2slider').value;
+			animPD.stopAnim();
+		}
+		else{
+			length_bar2 = document.getElementById('bar2slider').value;
+		}
+	}
+
+	function setBar3(value){
+		if(!animPD._running){
+			animPD.startAnim();
+			length_bar3 = document.getElementById('bar3slider').value;
+			animPD.stopAnim();
+		}
+		else{
+			length_bar3 = document.getElementById('bar3slider').value;
+		}
+	}
+
+	function setBase(value){
+		if(!animPD._running){
+			animPD.startAnim();
+			length_base = document.getElementById('baseslider').value;
+			animPD.stopAnim();
+		}
+		else{
+			length_base = document.getElementById('baseslider').value;
+		}
+	}
+
+	</script>
+
+	<p>
+	Omega: <input id="omegaslider" type="range" min="-3" max="3" value="0" step="0.01" onchange=setOmega()><p>
+	Left: <input id="bar1slider" type="range" min="0" max="4" value="1" step="0.01" onchange=setBar1()>
+	Middle: <input id="bar2slider" type="range" min="0" max="4" value="26/18" step="0.01" onchange=setBar2()>
+	Right: <input id="bar3slider" type="range" min="0" max="4" value="2" step="0.01" onchange=setBar3()><p>
+	Base: <input id="baseslider" type="range" min="0" max="4" value="40/18" step="0.01" onchange=setBase()><p>
+	<button onclick="animPD.toggleAnim();">Toggle animation</button> <p>
+	<button onclick="animPD.toggleOption('velocity');">Toggle Velocity</button>
+	<button onclick="animPD.toggleOption('acceleration');">Toggle Acceleration</button>
+	<p>
+
+
+
+	</body>
+</html>
