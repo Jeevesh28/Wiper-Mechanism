@@ -86,8 +86,8 @@
             this.setUnits(10, 10);
             this.translate($V([0,-0.5]));
             this.setProp("arrowLineWidthPx",2);
-            this.addOption("velocity",false);
-            this.addOption("acceleration",false);
+            this.addOption("velocity",true);
+            this.addOption("acceleration",true);
 
             //LENGTH AND ANGLE CALCULATIONS
             var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
@@ -196,6 +196,50 @@
             this.rod($V([0,0]), $V([O6D,0]), 0.2);
             this.point($V([0,0]));
             this.point($V([O6D,0]));
+
+            var computeMotor = function(t) {
+            var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
+            var O2 = t*omega; //"theta"
+			var datamb = {};
+			datamb.Q = this.vector2DAtAngle(ref_angle + O2).x(O2A);
+			return datamb;
+		    }
+            var dataMotor = this.numDiff(computeMotor.bind(this), t);
+
+            var computeWiper = function(t) {
+            var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
+            var O2 = t*omega; //"theta"
+            var AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(O2));
+            var B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
+            var O2O4A = Math.asin(O2A * Math.sin(O2) / AO4);
+            var AO4B = Math.asin(AB * Math.sin(B) / AO4);
+            var O4 = O2O4A + AO4B;
+            var A = Math.PI - B - O4; // angle from horizontal
+			var datawp = {};
+			datawp.P = this.vector2DAtAngle(ref_angle-O4 + delta_angle).x(O4C);
+			return datawp;
+		    }
+            var dataWiper = this.numDiff(computeWiper.bind(this), t);
+            
+            if (this.getOption("velocity")) {
+            this.restore();
+            this.save();
+			this.translate(pivot_motor);
+			this.arrow(dataMotor.Q, dataMotor.Q.add(dataMotor.diff.Q), "velocity");
+            
+            this.restore();
+            this.save();
+			this.translate(pivot_right);
+			this.arrow(dataWiper.P, dataWiper.P.add(dataWiper.diff.P), "velocity");
+            
+		    }
+
+            if (this.getOption("acceleration")) {
+            this.restore();
+            this.save();
+			this.translate(pivot_right);
+			this.arrow(dataWiper.P, dataWiper.P.add(dataWiper.ddiff.P), "acceleration");
+            }
 
             this.restore();
             temp_time++;
