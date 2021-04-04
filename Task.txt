@@ -1,2 +1,10 @@
-5. velcity vs time graph
-6. acc vs time graph
+! - represents priority
+
+
+1. add a static photo with labels for each bar for a guide to user !
+2. centripetal acc and tangential acc can be shown sepearately for better visual !!
+3. (Aritra) See about force and torque thing !!!!!!!!!!
+4. velcity vs time graph !!!!!!!!!
+5. acc vs time graph    !!!!!!!!!!!
+6. add code for the motor to reverse direction when motor bar becomes a rocker (bcz oflength changes)- complete check_grashofsLaw() func
+  
