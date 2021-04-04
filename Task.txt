@@ -1,14 +1,2 @@
-Jatin-----------------------------------
-1. delta angle -show
-2. area value calculate and show
-3. Velocity and Acc code
-------------------------------------------
-
-Aritra &Jeevsh----------------------
 5. velcity vs time graph
 6. acc vs time graph
-
-Not on priority----------------------------------------------
-4. "i" button for explanation for each slider //less
-------------------------------------------------------------------
-

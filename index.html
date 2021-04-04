@@ -1,396 +1,561 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Wiper Mechanism</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Wiper Mechanism</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <style>
-        canvas {
-            border: 1px solid black;
-        }
-    </style>      
-</head>
-<body>
-    <h1 class="display-6 text-center bg-info bg-gradient py-2 mb-5 fw-normal">Mechanism Sessional Final Tutorial 5</h1>
-    <div class="container mx-5">
-        <div class="row">
-            <div class="col-xl-7 col-md-12">
-                <canvas id="wiper" width="600" height="600"></canvas>
-            </div>
-            <div class="col-xl-5 col-md-12">
-                <div class="row">
-                    <div class="d-inline text-center">
-                        <button id="animation" class="btn btn-success my-4 mx-2" onclick="animPD.toggleAnim(); update_butt();">Start animation</button>
-                        <button class="btn btn-warning my-4 mx-2" onclick="reset();">Reset</button>
-                    </div>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+            label {
+                width: 155px;
+                font-weight: bold;
+            }
+            span {
+                display: inline-block;
+                cursor: not-allowed;
+                width: 90px; 
+                padding: 2px 5px;
+                margin: 0px 10px;  
+                text-align: end;               
+            }
+            button[data-bs-toggle="tooltip"]{
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                margin-left: 5px;
+                font-size: small;
+                border: none;
+                color: aliceblue;
+                background-color: rgba(0, 0, 0, 0.548);
+            }
+        </style>      
+    </head>
+    <body>
+        <h1 class="display-6 text-center bg-info bg-gradient py-2 mb-5 fw-normal">Wiper Mechanism Simulation</h1>
+        <div class="container mx-5">
+            <div class="row">
+                <div class="col-xl-7 col-md-12">
+                    <canvas id="wiper" width="600" height="600"></canvas>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-xl-12 col-md-12">
-                        <label class="form-label fw-bold" >Angular Speed (ω) : </label>
-                        <span id="w_val" class="border rounded bg-ligth text-end p-2 py-1 mx-2" style="display: inline-block; width: 100px; cursor: not-allowed;">2 rad/s</span>
-                        <input type="range" id="omegaslider" class="form-range pt-3 ms-4" style="width: 200px;" min="-9" max="9" value="2" step="0.01" oninput=setOmega()>
-
-                        <label class="form-label fw-bold" >Delta Angle (δ) : </label>
-                        <span id="delta_val" class="border rounded bg-ligth text-end p-2 py-1 ms-5 mx-2" style="display: inline-block; width: 86px; cursor: not-allowed;">10º</span>
-                        <input type="range" id="delta" class="form-range pt-3 ms-4" style="width: 200px;" min="0" max="50" value="10" step="1" oninput="setdelta();">
-                        
-                        <hr>
-
-                        <label class="form-label fw-bold" >Motor Bar Length : </label>
-                        <span id="motor_bar_val" class="border rounded bg-ligth text-end p-2 py-1 ms-4 mx-2" style="display: inline-block; width: 90px; cursor: not-allowed;">0.6 units</span>
-                        <input type="range" id="motor_bar" class="form-range pt-3 ms-4" style="width: 200px;" min="0" max="3" value="0.6" step="0.1" oninput="setmotor();">
-
-                        <label class="form-label fw-bold" >Coupler Bar Length : </label>
-                        <span id="coupler_bar_val" class="border rounded bg-ligth text-end p-2 py-1 ms-3 mx-2" style="display: inline-block; width: 87px; cursor: not-allowed;">2.8 units</span>
-                        <input type="range" id="coupler_bar" class="form-range pt-3 ms-4" style="width: 200px;" min="0" max="3" value="2.8" step="0.1" oninput="setcoupler();">
-
-                        <label class="form-label fw-bold" >Output Bar Length : </label>
-                        <span id="output_bar_val" class="border rounded bg-ligth text-end p-2 py-1 ms-4 mx-2" style="display: inline-block; width: 85px; cursor: not-allowed;">1.6 units</span>
-                        <input type="range" id="output_bar" class="form-range pt-3 ms-4" style="width: 200px;" min="0" max="3" value="1.6" step="0.1" oninput="setoutput();">
-                        
+                <div class="col-xl-5 col-md-12">
+                    <div class="row">
+                        <div class="text-center">
+                            <button id="animation" class="btn btn-success my-2 w-50 mx-2" onclick="animPD.toggleAnim(); update_butt();">Start animation</button>
+                            <button class="btn btn-warning w-25 my-2 mx-2" onclick="reset();">Reset</button>
+                        </div>
                     </div>
-                   
-                </div>                
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12">
+
+                            <h5 style="color: rgb(226, 47, 47);"><u>Actuator (Motor)</u> :-</h5>
+
+                            <label>Angular Speed (ω)</label><b>:</b>
+                            <span id="w_val" class="border rounded bg-ligth">2 rad/s</span>
+                            <input type="range" id="omegaslider" class="form-range pt-3 ms-4" style="width: 170px;" min="-9" max="9" value="2" step="0.01" oninput=setOmega()><br>
+                            
+                            <hr>
+
+                            <h5 style="color: rgb(226, 47, 47);"><u>4-Bar Mechanism</u> :-</h5>
+
+                            <label>Motor Bar Length</label><b>:</b>
+                            <span id="motor_bar_val" class="border rounded bg-ligth">0.6 m</span>
+                            <input type="range" id="motor_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="3" value="0.6" step="0.1" oninput="setmotor();"><br>
+
+                            <label>Coupler Bar Length</label><b>:</b>
+                            <span id="coupler_bar_val" class="border rounded bg-ligth">2.8 m</span>
+                            <input type="range" id="coupler_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="3" value="2.8" step="0.1" oninput="setcoupler();"><br>
+
+                            <label>Output Bar Length</label><b>:</b>
+                            <span id="output_bar_val" class="border rounded bg-ligth">1.6 m</span>
+                            <input type="range" id="output_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="3" value="1.6" step="0.1" oninput="setoutput();"><br>
+
+                            <label>Base Bar Length</label><b>:</b>
+                            <span id="base_bar_val" class="border rounded bg-ligth"></span>
+                            <input type="range" id="base_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="4" value="" step="0.1" disabled>
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="This length is fixed.">
+                            <i>i</i></button><br>
+
+                            <hr>
+
+                            <h5 style="color: rgb(226, 47, 47);"><u>Wiper</u> :-</h5>
+
+                            <label style="width: 134px;">Delta Angle (δ)</label>
+                            <input type="checkbox" checked onclick="animPD.toggleOption('delta_label')">
+                            <b>:</b>
+                            <span id="delta_val" class="border rounded bg-ligth">10º</span>
+                            <input type="range" id="delta" class="form-range pt-3 ms-4" style="width: 170px;" min="-20" max="20" value="10" step="1" oninput="setdelta();">
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Controls the positioning of the Area wiped.">
+                            <i>i</i></button><br>
+
+                            <label>Wiper Bar Length</label><b>:</b>
+                            <span id="wiper_bar_val" class="border rounded bg-ligth">4 m</span>
+                            <input type="range" id="wiper_bar" class="form-range pt-3 ms-4" style="margin-bottom: 35px; width: 170px;" min="2" max="4.4" value="4" step="0.1" oninput="setwiper();"><br>
+
+                            <label>Area Wiped</label><b>:</b>
+                            <span id="area_val" class="border rounded bg-ligth mb-1">0 m<sup>2</sup></span><br>
+
+                            <label>Speed</label><b>:</b>
+                            <span id="speed_val" class="border rounded bg-ligth">0 m/s</span>                    
+                            <button id="speed_but" class="btn text-white" style="width: 200px; padding: 2px 3px; margin: 4px 0px; margin-left: 25px; background-color: rgba(0, 200, 0, 0.795);" onclick="animPD.toggleOption('velocity'); update_vec_butt('speed_but') ;">Show Velocity Vector</button><br>
+
+                            <label>|Acceleration|</label><b>:</b>
+                            <span id="acc_val" class="border rounded bg-ligth">0 m/s<sup>2</sup></span>                    
+                            <button id="acc_but" class="btn text-white" style="width: 200px; padding: 2px 3px; margin: 4px 0px; margin-left: 25px; background-color: rgba(255, 0, 255, 0.705);" onclick="animPD.toggleOption('acceleration'); update_vec_butt('acc_but');">Show Acceleration Vector</button><br>
+                            
+                        </div>
+                    </div>                
+                </div>
             </div>
         </div>
-    </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-    <script src="sylvester.js"></script>
-    <script src="PrairieDraw.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+        <script src="sylvester.js"></script>
+        <script src="PrairieDraw_latest.js"></script>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
 
-    <script type="application/javascript">
-        var temp_time = 0;
-        var omega = 2;
-        var pivot_motor = $V([3, -2]);
-        var delta_angle = (Math.PI/180)*10;
-        var path_points_above = [];
-        var path_points_below = [];
-        //Bar lengths
-        var length_motor_bar = 0.6;
-        var length_coupler_bar = 2.8;
-        var length_rocker_bar = 1.6;
-        var length_rocker_bar_ext = 4; //used 2 times
-        var length_dead_bar = 1; //used 2 times
-        var length_wiper_bar = 2;	
-        var length_base = Math.sqrt(pivot_motor.e(1)*pivot_motor.e(1) + pivot_motor.e(2)*pivot_motor.e(2));
+        <script type="application/javascript">
+            var temp_time = 0;
 
-        animPD = new PrairieDrawAnim("wiper", function(t) {
+            var omega = 2;
+            var pivot_motor = $V([3, -2]);
+            var delta_angle = (Math.PI/180)*10;
+            var path_points_above = [];
+            var path_points_below = [];
+            var maxO4 = 0;
+            var minO4 = 0;
+            //Bar lengths
+            var length_motor_bar = 0.6;
+            var length_coupler_bar = 2.8;
+            var length_rocker_bar = 1.6;
+            var length_rocker_bar_ext = 4; //used 2 times
+            var length_dead_bar = 1; //used 2 times
+            var length_wiper_bar = 2;	
+            var length_base = Math.sqrt(pivot_motor.e(1)*pivot_motor.e(1) + pivot_motor.e(2)*pivot_motor.e(2));
 
-            //SET UP PRAIRIEDRAW
-            this.setUnits(10, 10);
-            this.translate($V([0,-0.5]));
-            this.setProp("arrowLineWidthPx",2);
-            this.addOption("velocity",true);
-            this.addOption("acceleration",true);
+            document.getElementById('base_bar').value = length_base;
+            document.getElementById("base_bar_val").innerHTML = `${length_base.toFixed(2)} m`;
 
-            //LENGTH AND ANGLE CALCULATIONS
-            var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
-            var O2 = t*omega; //"theta"
-            var O2A = length_motor_bar; //length of crank bar
-            var AB = length_coupler_bar; //length of coupler
-            var BO4 = length_rocker_bar; //length of rocker
-            var O4C = length_rocker_bar_ext; //length of extended rocker bar
-            var O4O2 = length_base; // BASE
-            var O6D = O4C; // the parallel bar
-            var DC = length_dead_bar; // dead bar 
-            var O6O4 = DC; // parallel to dead bar
+            animPD = new PrairieDrawAnim("wiper", function(t) {
 
-            var AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(O2));
-            var B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
-            var O2O4A = Math.asin(O2A * Math.sin(O2) / AO4);
-            var AO4B = Math.asin(AB * Math.sin(B) / AO4);
-            var O4 = O2O4A + AO4B;
-            var A = Math.PI - B - O4; // angle from horizontal
+                //SET UP PRAIRIEDRAW
+                this.setUnits(10, 10);
+                this.translate($V([0,-0.5]));
+                this.setProp("arrowLineWidthPx",3);
+                this.addOption("velocity",false);
+                this.addOption("acceleration",false);
+                this.addOption("delta_label",true);
 
-            //DRAW GROUND
-            var G1 = $V([0, -0.3]);
-            var G2 = $V([pivot_motor.e(1), pivot_motor.e(2)-0.3]);
-            this.ground(G1, $V([0, 1]), 15);
-            this.ground(G2, $V([0, 1]), 0.8);
+                //LENGTH AND ANGLE CALCULATIONS
+                var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
+                var O2 = t*omega; //"theta"
+                var O2A = length_motor_bar; //length of crank bar
+                var AB = length_coupler_bar; //length of coupler
+                var BO4 = length_rocker_bar; //length of rocker
+                var O4C = length_rocker_bar_ext; //length of extended rocker bar
+                var O4O2 = length_base; // BASE
+                var O6D = O4C; // the parallel bar
+                var DC = length_dead_bar; // dead bar 
+                var O6O4 = DC; // parallel to dead bar
 
-            //Text for motor
-            this.text($V([pivot_motor.e(1), pivot_motor.e(2)-1]), $V([pivot_motor.e(1)-3, pivot_motor.e(2)]), "Motor" );
+                var AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(O2));
+                var B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
+                var O2O4A = Math.asin(O2A * Math.sin(O2) / AO4);
+                var AO4B = Math.asin(AB * Math.sin(B) / AO4);
+                var O4 = O2O4A + AO4B;
+                var A = Math.PI - B - O4; // angle from horizontal
 
-            //DRAW PIVOTS
-            var pivot_right = $V([0, 0]);
-            var pivot_left = $V([-O6O4, 0]);
-            this.pivot($V([pivot_right.e(1), -0.3]), pivot_right, 0.4);
-            this.pivot($V([pivot_left.e(1), -0.3]), pivot_left, 0.4);
-            this.pivot($V([pivot_motor.e(1), pivot_motor.e(2)-0.3]), pivot_motor, 0.4);
-
-            // saving properties before tranforming the coord sys
-            this.save();
-            //MOTOR BAR
-            this.translate(pivot_motor);
-            this.rotate(ref_angle + O2);
-            this.rod($V([0,0]), $V([O2A,0]), 0.2);
-            this.point($V([0,0]));
-
-            //COUPLER BAR
-            this.translate($V([O2A,0]));
-            this.rotate(A-O2); 	//"undo" the previous rotation
-            this.rod($V([0,0]), $V([AB,0]), 0.2);
-            this.point($V([0,0]));
-            
-            //ROCKER BAR
-            this.translate($V([AB,0]));
-            this.rotate(-(A + O4));
-            this.rod($V([0,0]), $V([BO4,0]), 0.2);
-            this.point($V([0,0]));
-
-            this.restore();
-
-            this.save();
-            //path generation
-            var x;
-            x = $V([O4C,0]);
-            x = x.rotate(ref_angle-O4 + delta_angle, $V([0,0]));
-            var y = $V([x.e(1) + 0.15/2 , x.e(2) + length_wiper_bar/2]);
-            var z = $V([x.e(1) + 0.15/2 , x.e(2) - length_wiper_bar/2]);
-
-            if(temp_time < 400)
-            {
-                path_points_above.push(y);
-                path_points_below.push(z);
-            }
-                
-            for(var i = 0; i<path_points_below.length; i++)
-            {
-                // this.thinpoint(path_points_above[i], 0.5);   // 2nd argument is thinkness
-                // this.thinpoint(path_points_below[i], 0.5);   // 2nd argument is thinkness
-                this.line(path_points_above[i], path_points_below[i], "acceleration", "#809fff");
-            }
-
-            this.restore();
-
-            this.save();
-            //Dead bar with wiper
-            this.translate($V([-O6O4,0]));
-            this.rotate(ref_angle-O4 + delta_angle);
-            this.translate($V([O6D,0]));
-            this.rotate(-(ref_angle-O4 + delta_angle));
-            this.wiper($V([0,0]), $V([DC,0]), 0.15, length_wiper_bar);
-            this.point($V([0,0]));
-            this.point($V([DC,0]));
-
-            this.restore();
-
-            this.save();
-            //Extended ROCKER BAR
-            this.rotate(ref_angle-O4 + delta_angle);
-            this.customrod($V([0,0]), $V([O4C,0]), 0.2);
-            this.point($V([0,0]));
-            this.point($V([O4C,0]));
-
-            this.restore();
-            this.save();
-            //Extended ROCKER BAR parallel
-            this.translate($V([-O6O4,0]));
-            this.rotate(ref_angle-O4 + delta_angle);
-            this.rod($V([0,0]), $V([O6D,0]), 0.2);
-            this.point($V([0,0]));
-            this.point($V([O6D,0]));
-
-            var computeMotor = function(t) {
-            var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
-            var O2 = t*omega; //"theta"
-			var datamb = {};
-			datamb.Q = this.vector2DAtAngle(ref_angle + O2).x(O2A);
-			return datamb;
-		    }
-            var dataMotor = this.numDiff(computeMotor.bind(this), t);
-
-            var computeWiper = function(t) {
-            var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
-            var O2 = t*omega; //"theta"
-            var AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(O2));
-            var B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
-            var O2O4A = Math.asin(O2A * Math.sin(O2) / AO4);
-            var AO4B = Math.asin(AB * Math.sin(B) / AO4);
-            var O4 = O2O4A + AO4B;
-            var A = Math.PI - B - O4; // angle from horizontal
-			var datawp = {};
-			datawp.P = this.vector2DAtAngle(ref_angle-O4 + delta_angle).x(O4C);
-			return datawp;
-		    }
-            var dataWiper = this.numDiff(computeWiper.bind(this), t);
-            
-            if (this.getOption("velocity")) {
-            this.restore();
-            this.save();
-			this.translate(pivot_motor);
-			this.arrow(dataMotor.Q, dataMotor.Q.add(dataMotor.diff.Q), "velocity");
-            
-            this.restore();
-            this.save();
-			this.translate(pivot_right);
-			this.arrow(dataWiper.P, dataWiper.P.add(dataWiper.diff.P), "velocity");
-            
-		    }
-
-            if (this.getOption("acceleration")) {
-            this.restore();
-            this.save();
-			this.translate(pivot_right);
-			this.arrow(dataWiper.P, dataWiper.P.add(dataWiper.ddiff.P), "acceleration");
-            }
-
-            this.restore();
-            temp_time++;
-        });
-
-
-        function check_grashofsLaw(){
-            var bars = [length_motor_bar, length_coupler_bar, length_rocker_bar, length_base];
-            bars.sort();
-            var leftSide = (parseFloat(bars[0]) + parseFloat(bars[3])).toFixed(4); // lmin + lmax
-            var rightSide = (parseFloat(bars[1]) + parseFloat(bars[2])).toFixed(4);// p + q
-            
-            if(leftSide <= rightSide) // grashof true
-            {
-                if(bars[0] == length_base) // when lmin is the base - double-crank
+                //getting difference of max and min values of angle O4 for area calculation
+                if(O4 >= maxO4)
                 {
+                    maxO4 = O4;
                 }
-                else if(bars[3] == length_base)// when lmax is the base - rank-rocker
+                if(O4 <= minO4)
                 {
-                    if(bars[0] != length_motor_bar) // and motor_bar is NOT the lmin
+                    minO4 = O4;
+                }
+                var angle_displ = maxO4-minO4;
+                var arc_len = angle_displ*O4C; //l=theta*r
+                var area = arc_len*length_wiper_bar; 
+                
+                if(t>2)
+                {
+                    document.getElementById("area_val").innerHTML = `${area.toFixed(2)} m<sup>2</sup>`;
+                }
+                else
+                {
+                    document.getElementById("area_val").innerHTML = `0 m<sup>2</sup>`;
+                }
+
+                //DRAW GROUND
+                var G1 = $V([0, -0.3]);
+                var G2 = $V([pivot_motor.e(1), pivot_motor.e(2)-0.3]);
+                this.ground(G1, $V([0, 1]), 15);
+                this.ground(G2, $V([0, 1]), 0.8);
+
+                //Text for motor
+                this._ctx.font = "15px Arial";
+                this.text($V([pivot_motor.e(1), pivot_motor.e(2)-1]), $V([pivot_motor.e(1)-3, pivot_motor.e(2)]), "Motor" );
+
+                //DRAW PIVOTS
+                var pivot_right = $V([0, 0]);
+                var pivot_left = $V([-O6O4, 0]);
+                this.pivot($V([pivot_right.e(1), -0.3]), pivot_right, 0.4);
+                this.pivot($V([pivot_left.e(1), -0.3]), pivot_left, 0.4);
+                this.pivot($V([pivot_motor.e(1), pivot_motor.e(2)-0.3]), pivot_motor, 0.4);
+
+                // saving properties before tranforming the coord sys
+                this.save();
+                //MOTOR BAR
+                this.translate(pivot_motor);
+                this.rotate(ref_angle + O2);
+                this.rod($V([0,0]), $V([O2A,0]), 0.2);
+                this.point($V([0,0]));
+
+                //COUPLER BAR
+                this.translate($V([O2A,0]));
+                this.rotate(A-O2); 	//"undo" the previous rotation
+                this.rod($V([0,0]), $V([AB,0]), 0.2);
+                this.point($V([0,0]));
+                
+                //ROCKER BAR
+                this.translate($V([AB,0]));
+                this.rotate(-(A + O4));
+                this.rod($V([0,0]), $V([BO4,0]), 0.2);
+                this.point($V([0,0]));
+
+                this.restore();
+
+                //path generation
+                this.save();
+                var x;
+                x = $V([O4C,0]);
+                x = x.rotate(ref_angle-O4 + delta_angle, $V([0,0]));
+                var y = $V([x.e(1) + 0.15/2 , x.e(2) + length_wiper_bar/2]);
+                var z = $V([x.e(1) + 0.15/2 , x.e(2) - length_wiper_bar/2]);
+
+                if(temp_time < 400)
+                {
+                    path_points_above.push(y);
+                    path_points_below.push(z);
+                }
+                    
+                for(var i = 0; i<path_points_below.length; i++)
+                {
+                    this.setProp("shapeOutlineColor", "#a8beff");
+                    this.line(path_points_above[i], path_points_below[i]);
+                }
+
+                this.restore();
+
+                //Dead bar with wiper
+                this.save();
+                this.translate($V([-O6O4,0]));
+                this.rotate(ref_angle-O4 + delta_angle);
+                this.translate($V([O6D,0]));
+                this.rotate(-(ref_angle-O4 + delta_angle));
+                this.wiper($V([0,0]), $V([DC,0]), 0.15, length_wiper_bar);
+                this.restore();
+
+                //Extended ROCKER BAR
+                this.save();
+                this.rotate(ref_angle-O4 + delta_angle);
+                this.customrod($V([0,0]), $V([O4C,0]), 0.2);
+                this.point($V([0,0]));
+                this.point($V([O4C,0]));
+                this.restore();
+
+                //Extended ROCKER BAR parallel
+                this.save();
+                this.translate($V([-O6O4,0]));
+                this.rotate(ref_angle-O4 + delta_angle);
+                this.rod($V([0,0]), $V([O6D,0]), 0.2);
+                this.point($V([0,0]));
+                this.point($V([O6D,0]));
+                this.restore();
+
+                //delta angle labelling
+                if(this.getOption("delta_label"))
+                {
+                    this.save();
+                    this.rotate(ref_angle-O4);
+                    this.setProp("arrowLineWidthPx", 2);
+                    this.setProp("shapeOutlineColor", "red");
+                    this.setProp("shapeStrokePattern", "dashed");
+                    this.line($V([-BO4+1,0]), $V([1.5,0]));
+                    this.rotate(delta_angle);
+                    this.line($V([0,0]), $V([1.5,0]));
+                    this.rotate(-delta_angle);
+                    this.circleArrow($V([0,0]), 1.4, 0, delta_angle);
+                    this._ctx.font = "15px Arial";
+                    this.labelCircleLine($V([0,0]), 1.4, 0, delta_angle, $V([1, 3]), `δ = ${Math.round(delta_angle*(180/Math.PI))}º`, true);
+                    this.restore();
+                }
+                
+                //VELOCITY AND ACCELERATION
+                    //for motor bar
+                var computeMotor = function(t) {
+                    O2 = t*omega; //"theta"
+                    var dataNow = {};
+                    dataNow.A = this.vector2DAtAngle(ref_angle + O2).x(O2A);
+                    return dataNow;
+                }
+                var dataMotor = this.numDiff(computeMotor.bind(this), t);
+
+                    //for wiper bar
+                var computeWiper = function(t) {
+                    //have to recompute these with the new t for better accuracy as some time is passed till control reaches this line
+                    O2 = t*omega;
+                    AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(O2));
+                    B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
+                    O4 = Math.asin(O2A * Math.sin(O2) / AO4) + Math.asin(AB * Math.sin(B) / AO4);
+                    A = Math.PI - B - O4; // angle from horizontal
+
+                    var dataNow = {};
+                    dataNow.C = this.vector2DAtAngle(ref_angle-O4 + delta_angle).x(O4C);
+                    return dataNow;
+                }
+                var dataWiper = this.numDiff(computeWiper.bind(this), t);
+
+                document.getElementById('speed_val').innerHTML = `${dataWiper.diff.C.modulus().toFixed(2)} m/s`;
+                document.getElementById('acc_val').innerHTML = `${dataWiper.ddiff.C.modulus().toFixed(1)} m/s<sup>2</sup>`;            
+
+                //scaling factor to scale down vel and acc magnitude as arrows get too big!!
+                var scaling_factor = 3; 
+
+                //velocity vector for motor
+                this.save();
+                    this.translate(pivot_motor);
+                    this.arrow(dataMotor.A, dataMotor.A.add(dataMotor.diff.A.x(1/scaling_factor)), "velocity");
+                this.restore();
+
+                if (this.getOption("velocity")) {
+                    
+                    //velocity vector for wiper
+                    this.save();
+                        this.translate(pivot_right);
+                        this.arrow(dataWiper.C, dataWiper.C.add(dataWiper.diff.C.x(1/scaling_factor)), "velocity");
+                    this.restore();                
+                }
+
+                if (this.getOption("acceleration")) {
+                    // //acceleration vector for motor
+                    // this.save();
+                    //     this.translate(pivot_motor);
+                    //     this.arrow(dataMotor.A, dataMotor.A.add(dataMotor.ddiff.A.x(1/scaling_factor)), "acceleration");
+                    // this.restore();
+
+                    //acceleration vector for wiper
+                    this.save();
+                        this.translate(pivot_right);
+                        this.arrow(dataWiper.C, dataWiper.C.add(dataWiper.ddiff.C.x(1/scaling_factor)), "acceleration");
+                    this.restore();
+                }
+
+                temp_time++;
+            });
+
+
+            function check_grashofsLaw(){
+                var bars = [length_motor_bar, length_coupler_bar, length_rocker_bar, length_base];
+                bars.sort();
+                var leftSide = (parseFloat(bars[0]) + parseFloat(bars[3])).toFixed(4); // lmin + lmax
+                var rightSide = (parseFloat(bars[1]) + parseFloat(bars[2])).toFixed(4);// p + q
+                
+                if(leftSide <= rightSide) // grashof true
+                {
+                    if(bars[0] == length_base) // when lmin is the base - double-crank
                     {
-                        omega = omega*-1;
+                    }
+                    else if(bars[3] == length_base)// when lmax is the base - rank-rocker
+                    {
+                        if(bars[0] != length_motor_bar) // and motor_bar is NOT the lmin
+                        {
+                            omega = omega*-1;
+                        }
+                    }
+                    else if(true)
+                    {
+                        
                     }
                 }
-                else if(true)
+                else // non-grashof - double-rocker
                 {
-                    
+                    omega = omega*-1;
                 }
             }
-            else // non-grashof - double-rocker
+
+            function update_butt()
             {
-                omega = omega*-1;
+                var anim_butt = document.getElementById("animation");
+                if(animPD._running)
+                {
+                    anim_butt.innerHTML = "Stop animation";
+                    anim_butt.classList = "btn btn-danger w-50 my-2 mx-2";
+                }
+                else{
+                    anim_butt.innerHTML = "Start animation";
+                    anim_butt.classList = "btn btn-success w-50 my-2 mx-2";
+                }
             }
-        }
 
-        function update_butt()
-        {
-            var anim_butt = document.getElementById("animation");
-            if(animPD._running)
+            function update_vec_butt(idname)
             {
-                anim_butt.innerHTML = "Stop animation";
-                anim_butt.classList = "btn btn-danger my-4 mx-2";
+                var butt = document.getElementById(idname);
+                var text = butt.innerHTML;
+                if(text.slice(0,4) == "Show")
+                {
+                    butt.innerHTML = "Hide" + text.slice(4); 
+                }
+                else
+                {
+                    butt.innerHTML = "Show" + text.slice(4);
+                }
             }
-            else{
-                anim_butt.innerHTML = "Start animation";
-                anim_butt.classList = "btn btn-success my-4 mx-2";
-            }
-        }
 
-        function reset ()
-        {
-            animPD.stopAnim();
-            update_butt();
-            animPD.reset();
-            animPD.resetDrawing();
-            animPD.startAnim();
-            animPD.stopAnim();
-
-            temp_time = 0;
-            path_points_above = [];
-            path_points_below = [];
-
-            omega = 2;
-            delta_angle = (Math.PI/180)*10;
-            length_motor_bar = 0.6;
-            length_coupler_bar = 2.8;
-            length_rocker_bar = 1.6;
-
-            document.getElementById('omegaslider').value = omega;
-            document.getElementById("w_val").innerHTML = `${omega} rad/s`;
-
-            document.getElementById('delta').value = delta_angle*(180/Math.PI);
-            document.getElementById("delta_val").innerHTML = `${Math.round(delta_angle*(180/Math.PI))}º`;
-
-            document.getElementById('motor_bar').value = length_motor_bar;
-            document.getElementById("motor_bar_val").innerHTML = `${length_motor_bar} units`;
-
-            document.getElementById('coupler_bar').value = length_coupler_bar;
-            document.getElementById("coupler_bar_val").innerHTML = `${length_coupler_bar} units`;
-
-            document.getElementById('output_bar').value = length_rocker_bar;
-            document.getElementById("output_bar_val").innerHTML = `${length_rocker_bar} units`;
-        }
-
-        function setOmega(value){
-            omega = document.getElementById('omegaslider').value;
-            document.getElementById("w_val").innerHTML = `${omega} rad/s`;
-        }
-
-        function setdelta(value){
-            temp_time = 0;
-            path_points_above = [];
-            path_points_below = [];
-            if(!animPD._running){
+            function reset ()
+            {
+                animPD.stopAnim();
+                update_butt();
+                animPD.reset();
                 animPD.startAnim();
-                delta_angle = document.getElementById('delta').value*(Math.PI/180);
+                animPD.stopAnim();
+
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
+
+                omega = 2;
+                delta_angle = (Math.PI/180)*10;
+                length_motor_bar = 0.6;
+                length_coupler_bar = 2.8;
+                length_rocker_bar = 1.6;
+                length_rocker_bar_ext = 4;
+
+                document.getElementById('omegaslider').value = omega;
+                document.getElementById("w_val").innerHTML = `${omega} rad/s`;
+
+                document.getElementById('delta').value = delta_angle*(180/Math.PI);
                 document.getElementById("delta_val").innerHTML = `${Math.round(delta_angle*(180/Math.PI))}º`;
-                animPD.stopAnim();
-            }
-            else{
-                delta_angle = document.getElementById('delta').value*(Math.PI/180);
-                document.getElementById("delta_val").innerHTML = `${Math.round(delta_angle*(180/Math.PI))}º`;
-            }
-        }
 
-        function setmotor(value){
-            temp_time = 0;
-            path_points_above = [];
-            path_points_below = [];
-            if(!animPD._running){
-                animPD.startAnim();
-                length_motor_bar = document.getElementById('motor_bar').value;
-                document.getElementById("motor_bar_val").innerHTML = `${length_motor_bar} units`;
-                animPD.stopAnim();
-            }
-            else{
-                length_motor_bar = document.getElementById('motor_bar').value;
-                document.getElementById("motor_bar_val").innerHTML = `${length_motor_bar} units`;
-            }
-        }
-        function setcoupler(value){
-            temp_time = 0;
-            path_points_above = [];
-            path_points_below = [];
-            if(!animPD._running){
-                animPD.startAnim();
-                length_coupler_bar = document.getElementById('coupler_bar').value;
-                document.getElementById("coupler_bar_val").innerHTML = `${length_coupler_bar} units`;
-                animPD.stopAnim();
-            }
-            else{
-                length_coupler_bar = document.getElementById('coupler_bar').value;
-                document.getElementById("coupler_bar_val").innerHTML = `${length_coupler_bar} units`;
-            }
-        }
-        function setoutput(value){
-            temp_time = 0;
-            path_points_above = [];
-            path_points_below = [];
-            if(!animPD._running){
-                animPD.startAnim();
-                length_rocker_bar = document.getElementById('output_bar').value;
-                document.getElementById("output_bar_val").innerHTML = `${length_rocker_bar} units`;
-                animPD.stopAnim();
-            }
-            else{
-                length_rocker_bar = document.getElementById('output_bar').value;
-                document.getElementById("output_bar_val").innerHTML = `${length_rocker_bar} units`;
-            }
-        }
+                document.getElementById('motor_bar').value = length_motor_bar;
+                document.getElementById("motor_bar_val").innerHTML = `${length_motor_bar} m`;
 
-    </script>
-</body>
+                document.getElementById('coupler_bar').value = length_coupler_bar;
+                document.getElementById("coupler_bar_val").innerHTML = `${length_coupler_bar} m`;
+
+                document.getElementById('output_bar').value = length_rocker_bar;
+                document.getElementById("output_bar_val").innerHTML = `${length_rocker_bar} m`;
+
+                document.getElementById('wiper_bar').value = length_rocker_bar_ext;
+                document.getElementById("wiper_bar_val").innerHTML = `${length_rocker_bar_ext} m`;
+            }
+
+            function setOmega(value){
+                if(!animPD._running){
+                    animPD.startAnim();
+                    omega = document.getElementById('omegaslider').value;
+                    document.getElementById("w_val").innerHTML = `${omega} rad/s`;
+                    animPD.stopAnim();
+                }
+                else{
+                    omega = document.getElementById('omegaslider').value;
+                    document.getElementById("w_val").innerHTML = `${omega} rad/s`;
+                }
+            }
+
+            function setdelta(value){
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
+                if(!animPD._running){
+                    animPD.startAnim();
+                    delta_angle = document.getElementById('delta').value*(Math.PI/180);
+                    document.getElementById("delta_val").innerHTML = `${Math.round(delta_angle*(180/Math.PI))}º`;
+                    animPD.stopAnim();
+                }
+                else{
+                    delta_angle = document.getElementById('delta').value*(Math.PI/180);
+                    document.getElementById("delta_val").innerHTML = `${Math.round(delta_angle*(180/Math.PI))}º`;
+                }
+            }
+
+            function setmotor(value){
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
+                if(!animPD._running){
+                    animPD.startAnim();
+                    length_motor_bar = document.getElementById('motor_bar').value;
+                    document.getElementById("motor_bar_val").innerHTML = `${length_motor_bar} m`;
+                    animPD.stopAnim();
+                }
+                else{
+                    length_motor_bar = document.getElementById('motor_bar').value;
+                    document.getElementById("motor_bar_val").innerHTML = `${length_motor_bar} m`;
+                }
+            }
+            function setcoupler(value){
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
+                if(!animPD._running){
+                    animPD.startAnim();
+                    length_coupler_bar = document.getElementById('coupler_bar').value;
+                    document.getElementById("coupler_bar_val").innerHTML = `${length_coupler_bar} m`;
+                    animPD.stopAnim();
+                }
+                else{
+                    length_coupler_bar = document.getElementById('coupler_bar').value;
+                    document.getElementById("coupler_bar_val").innerHTML = `${length_coupler_bar} m`;
+                }
+            }
+            function setoutput(value){
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
+                if(!animPD._running){
+                    animPD.startAnim();
+                    length_rocker_bar = document.getElementById('output_bar').value;
+                    document.getElementById("output_bar_val").innerHTML = `${length_rocker_bar} m`;
+                    animPD.stopAnim();
+                }
+                else{
+                    length_rocker_bar = document.getElementById('output_bar').value;
+                    document.getElementById("output_bar_val").innerHTML = `${length_rocker_bar} m`;
+                }
+            }
+
+            function setwiper(){
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
+                if(!animPD._running){
+                    animPD.startAnim();
+                    length_rocker_bar_ext = document.getElementById('wiper_bar').value;
+                    document.getElementById("wiper_bar_val").innerHTML = `${length_rocker_bar_ext} m`;
+                    animPD.stopAnim();
+                }
+                else{
+                    length_rocker_bar_ext = document.getElementById('wiper_bar').value;
+                    document.getElementById("wiper_bar_val").innerHTML = `${length_rocker_bar_ext} m`;
+                }
+            }
+
+
+        </script>
+    </body>
 </html>
