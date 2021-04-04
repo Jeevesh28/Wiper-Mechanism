@@ -7,4 +7,5 @@
 4. velcity vs time graph !!!!!!!!!
 5. acc vs time graph    !!!!!!!!!!!
 6. add code for the motor to reverse direction when motor bar becomes a rocker (bcz oflength changes)- complete check_grashofsLaw() func
-  
+7. resolve that 2 points not coming on changing wiper bar length
+8. add content to i buttons where ever necessary.  
