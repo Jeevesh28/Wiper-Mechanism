@@ -10,4 +10,4 @@ A simple JavaScript library called [``PrairieDraw.js``](https://prairielearn.rea
 See the userManual.html in the User Manual folder, or use the JsDoc toolkit to generate the documentation with the included Makefile.
 
 ## Screenshots: :camera:
-<img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/ScreenShots/ss1.png" alt="SS1" width="800">
+<img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/Images/ss1.png" alt="SS1" width="800">

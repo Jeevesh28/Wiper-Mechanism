@@ -4,13 +4,32 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <link rel="shortcut icon" type="image/jpg" href="ScreenShots/icon.png"/>
+        <link rel="shortcut icon" type="image/jpg" href="Images/icon.png"/>
         <title>Wiper Mechanism</title>
 
 
         <link rel="stylesheet" href="GH_ribbon.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <style>
+            /* width */
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #888;
+            }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
             canvas {
                 border: 1px solid black;
             }
@@ -28,20 +47,23 @@
             }
             button[data-bs-toggle="tooltip"]{
                 border-radius: 50%;
-                width: 20px;
-                height: 20px;
-                margin-left: 5px;
-                font-size: small;
+                width: 15px;
+                height: 15px;
+                margin-left: 15px;
+                text-align: center;
+                padding-top: 0px;
+                vertical-align: middle;
+                font-size: 10px;
                 border: none;
                 color: aliceblue;
-                background-color: rgba(0, 0, 0, 0.548);
+                background-color: rgba(0, 0, 0, 0.473);
             }
         </style>      
     </head>
     <body>
         <a target="_blank" class="github-fork-ribbon" href="https://github.com/jatin-47/Wiper-Mechanism" data-ribbon="Star me on GitHub" title="Fork me on GitHub">Star me on GitHub</a>
-        <h1 class="display-6 text-center bg-info bg-gradient py-2 mb-5 fw-normal">Wiper Mechanism Simulation</h1>
-        <div class="container mx-5">
+        <h1 class="display-6 text-center bg-info bg-gradient py-1 fw-normal" style="margin-bottom: 30px;">Wiper Mechanism Simulation</h1>
+        <div class="container mx-5 pb-4">
             <div class="row">
                 <div class="col-xl-7 col-md-12">
                     <canvas id="wiper" width="600" height="600"></canvas>
@@ -63,7 +85,7 @@
 
                             <label>Angular Speed (ω)</label><b>:</b>
                             <span id="w_val" class="border rounded bg-ligth">2 rad/s</span>
-                            <input type="range" id="omegaslider" class="form-range pt-3 ms-4" style="width: 170px;" min="-9" max="9" value="2" step="0.01" oninput=setOmega()><br>
+                            <input type="range" id="omegaslider" class="form-range pt-3 ms-3" style="width: 170px;" min="-9" max="9" value="2" step="0.01" oninput=setOmega()><br>
                             
                             <hr>
 
@@ -71,19 +93,19 @@
 
                             <label>Motor Bar Length</label><b>:</b>
                             <span id="motor_bar_val" class="border rounded bg-ligth">0.6 m</span>
-                            <input type="range" id="motor_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="3" value="0.6" step="0.1" oninput="setmotor();"><br>
+                            <input type="range" id="motor_bar" class="form-range pt-3 ms-3" style="width: 170px;" min="0.1" max="3" value="0.6" step="0.1" oninput="setmotor();"><br>
 
                             <label>Coupler Bar Length</label><b>:</b>
                             <span id="coupler_bar_val" class="border rounded bg-ligth">2.8 m</span>
-                            <input type="range" id="coupler_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="3" value="2.8" step="0.1" oninput="setcoupler();"><br>
+                            <input type="range" id="coupler_bar" class="form-range pt-3 ms-3" style="width: 170px;" min="0.1" max="3" value="2.8" step="0.1" oninput="setcoupler();"><br>
 
                             <label>Output Bar Length</label><b>:</b>
                             <span id="output_bar_val" class="border rounded bg-ligth">1.6 m</span>
-                            <input type="range" id="output_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="3" value="1.6" step="0.1" oninput="setoutput();"><br>
+                            <input type="range" id="output_bar" class="form-range pt-3 ms-3" style="width: 170px;" min="0.1" max="3" value="1.6" step="0.1" oninput="setoutput();"><br>
 
                             <label>Base Bar Length</label><b>:</b>
                             <span id="base_bar_val" class="border rounded bg-ligth"></span>
-                            <input type="range" id="base_bar" class="form-range pt-3 ms-4" style="width: 170px;" min="0.1" max="4" value="" step="0.1" disabled>
+                            <input type="range" id="base_bar" class="form-range pt-3 ms-3" style="width: 170px;" min="0.1" max="4" value="" step="0.1" disabled>
                             <button data-bs-toggle="tooltip" data-bs-placement="top" title="This length is fixed.">
                             <i>i</i></button><br>
 
@@ -91,29 +113,65 @@
 
                             <h5 style="color: rgb(226, 47, 47);"><u>Wiper</u> :-</h5>
 
-                            <label style="width: 134px;">Delta Angle (δ)</label>
-                            <input type="checkbox" checked onclick="animPD.toggleOption('delta_label')">
-                            <b>:</b>
+                            <label style="width: 115px;">Delta Angle (δ)</label>
+                            <div class="d-inline-block form-check form-switch" style="vertical-align: middle;" >
+                                <input class="form-check-input" type="checkbox" checked onclick="animPD.toggleOption('delta_label')">
+                            </div>
+                            <b style="margin-left: -8px;" >:</b>
                             <span id="delta_val" class="border rounded bg-ligth">10º</span>
-                            <input type="range" id="delta" class="form-range pt-3 ms-4" style="width: 170px;" min="-20" max="20" value="10" step="1" oninput="setdelta();">
+                            <input type="range" id="delta" class="form-range pt-3 ms-3" style="width: 170px;" min="-30" max="30" value="10" step="1" oninput="setdelta();">
                             <button data-bs-toggle="tooltip" data-bs-placement="top" title="Controls the positioning of the Area wiped.">
                             <i>i</i></button><br>
 
                             <label>Wiper Bar Length</label><b>:</b>
                             <span id="wiper_bar_val" class="border rounded bg-ligth">4 m</span>
-                            <input type="range" id="wiper_bar" class="form-range pt-3 ms-4" style="margin-bottom: 35px; width: 170px;" min="2" max="4.4" value="4" step="0.1" oninput="setwiper();"><br>
+                            <input type="range" id="wiper_bar" class="form-range pt-3 ms-3" style="margin-bottom: 26px; width: 170px;" min="2" max="4.4" value="4" step="0.1" oninput="setwiper();"><br>
 
                             <label>Area Wiped</label><b>:</b>
                             <span id="area_val" class="border rounded bg-ligth mb-1">0 m<sup>2</sup></span><br>
 
                             <label>Speed</label><b>:</b>
-                            <span id="speed_val" class="border rounded bg-ligth">0 m/s</span>                    
-                            <button id="speed_but" class="btn text-white" style="width: 200px; padding: 2px 3px; margin: 4px 0px; margin-left: 25px; background-color: rgba(0, 200, 0, 0.795);" onclick="animPD.toggleOption('velocity'); update_vec_butt('speed_but') ;">Show Velocity Vector</button><br>
+                            <span id="speed_val" class="border rounded bg-ligth">0 m/s</span> 
 
-                            <label>|Acceleration|</label><b>:</b>
-                            <span id="acc_val" class="border rounded bg-ligth">0 m/s<sup>2</sup></span>                    
-                            <button id="acc_but" class="btn text-white" style="width: 200px; padding: 2px 3px; margin: 4px 0px; margin-left: 25px; background-color: rgba(255, 0, 255, 0.705);" onclick="animPD.toggleOption('acceleration'); update_vec_butt('acc_but');">Show Acceleration Vector</button><br>
-                            
+                            <div class="d-inline-block form-check form-switch ms-3" style="vertical-align: middle; padding: 0px; position:relative;">
+                                <input class="form-check-input" style="margin-top: 6px; position: absolute; left: 50px;" type="checkbox" id="flexSwitchCheckDefault1" onclick="animPD.toggleOption('velocity');">
+                                <label class="btn text-white form-check-label fw-normal" for="flexSwitchCheckDefault1" style="width: 170px; padding: 1px 10px; margin: 0px 0px; background-color: rgba(2, 177, 2, 0.795); text-align: right;">
+                                    Velocity Vector
+                                </label>
+                            </div>
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Green vectors represents velocity.">
+                                <i>i</i>
+                            </button>
+
+                            <br>
+
+                            <label>|Net Acceleration|</label><b>:</b>
+                            <span id="acc_val" class="border rounded bg-ligth" style="margin-top: 2px;" >0 m/s<sup>2</sup></span>                    
+                        
+                            <div class="d-inline-block form-check form-switch ms-3" style="vertical-align: middle; padding: 0px; position:relative;">
+                                <input class="form-check-input" style="margin-top: 6px;  position: absolute; left: 50px;" type="checkbox" id="flexSwitchCheckDefault" onclick="animPD.toggleOption('acceleration');">
+                                <label class="btn text-white form-check-label fw-normal" for="flexSwitchCheckDefault" style="width: 170px; padding: 1px 10px; margin: 0px 0px; background-color: rgba(150, 0, 150, 0.699); text-align: right;">
+                                    Acc Vectors
+                                </label>
+                            </div>
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Dark pink vector represents the net acceleration and light pink vectors represents centripetal acceleration (ac) and tangential acceleration (at).">
+                                <i>i</i>
+                            </button>
+    
+                            <br>
+
+                            <label>|a<sub>c</sub>| (Centripetal)</label><b>:</b>
+                            <span id="cent_val" class="border rounded bg-ligth" style=" margin-top: 2px;">0 m/s<sup>2</sup>
+                            </span>         
+                            <button data-bs-toggle="tooltip" data-bs-placement="top" title="Can be verified by calculating (speed)^2/(wiper bar length) from above.">
+                                <i>i</i>
+                            </button>           
+                            <br>
+
+                            <label>|a<sub>t</sub>| (Tangential)</label><b>:</b>
+                            <span id="tan_val" class="border rounded bg-ligth" style=" margin-top: 4px;">0 m/s<sup>2</sup></span>                    
+                            <br>
+
                         </div>
                     </div>                
                 </div>
@@ -132,7 +190,11 @@
         </script>
 
         <script type="application/javascript">
+            var time = 0; 
             var temp_time = 0;
+            var flag = 0;
+            var O2 = 0;
+            var teta = 0;
 
             var omega = 2;
             var pivot_motor = $V([3, -2]);
@@ -150,6 +212,9 @@
             var length_wiper_bar = 2;	
             var length_base = Math.sqrt(pivot_motor.e(1)*pivot_motor.e(1) + pivot_motor.e(2)*pivot_motor.e(2));
 
+            var sum = length_coupler_bar + length_rocker_bar;
+            var modsum = sum - 0.03;
+
             document.getElementById('base_bar').value = length_base;
             document.getElementById("base_bar_val").innerHTML = `${length_base.toFixed(2)} m`;
 
@@ -165,7 +230,8 @@
 
                 //LENGTH AND ANGLE CALCULATIONS
                 var ref_angle = Math.PI - Math.acos(pivot_motor.e(1)/length_base);
-                var O2 = t*omega; //"theta"
+
+                O2 = O2 + omega*(t-time);
                 var O2A = length_motor_bar; //length of crank bar
                 var AB = length_coupler_bar; //length of coupler
                 var BO4 = length_rocker_bar; //length of rocker
@@ -204,6 +270,21 @@
                     document.getElementById("area_val").innerHTML = `0 m<sup>2</sup>`;
                 }
 
+                //handling When motor is a ROCKER
+                sum =  parseFloat(AB + BO4);
+                modsum =  parseFloat(sum - 0.03);
+
+                if( AO4.toFixed(2) >= modsum.toFixed(2) && flag == 0) // && o2 is not odd multiple of pi
+                {
+                    flag = 1;
+                    omega = omega*-1;                    
+                }
+                else if( AO4.toFixed(2) < sum.toFixed(2))
+                {
+                    flag = 0;
+                }
+                
+
                 //DRAW GROUND
                 var G1 = $V([0, -0.3]);
                 var G2 = $V([pivot_motor.e(1), pivot_motor.e(2)-0.3]);
@@ -221,7 +302,13 @@
                 this.pivot($V([pivot_left.e(1), -0.3]), pivot_left, 0.4);
                 this.pivot($V([pivot_motor.e(1), pivot_motor.e(2)-0.3]), pivot_motor, 0.4);
 
-                // saving properties before tranforming the coord sys
+                //base bar
+                this.save();
+                this.setProp("shapeOutlineColor", "grey");
+                this.setProp("shapeStrokePattern", "dashed");
+                this.line(pivot_right, pivot_motor);
+                this.restore();
+
                 this.save();
                 //MOTOR BAR
                 this.translate(pivot_motor);
@@ -308,24 +395,25 @@
                     this.labelCircleLine($V([0,0]), 1.4, 0, delta_angle, $V([1, 3]), `δ = ${Math.round(delta_angle*(180/Math.PI))}º`, true);
                     this.restore();
                 }
-                
+
                 //VELOCITY AND ACCELERATION
-                    //for motor bar
+                
+                //for motor bar
                 var computeMotor = function(t) {
-                    O2 = t*omega; //"theta"
+                    teta =  O2 + omega*(t-time);
                     var dataNow = {};
-                    dataNow.A = this.vector2DAtAngle(ref_angle + O2).x(O2A);
+                    dataNow.A = this.vector2DAtAngle(ref_angle + teta).x(O2A);
                     return dataNow;
                 }
                 var dataMotor = this.numDiff(computeMotor.bind(this), t);
 
-                    //for wiper bar
+                //for wiper bar
                 var computeWiper = function(t) {
-                    //have to recompute these with the new t for better accuracy as some time is passed till control reaches this line
-                    O2 = t*omega;
-                    AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(O2));
+                    //this is a function with it's own calculation by changing t by eps amt. So, no recurssive def will work. It's NOT a loop!
+                    teta =  O2 + omega*(t-time);
+                    AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(teta));
                     B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
-                    O4 = Math.asin(O2A * Math.sin(O2) / AO4) + Math.asin(AB * Math.sin(B) / AO4);
+                    O4 = Math.asin(O2A * Math.sin(teta) / AO4) + Math.asin(AB * Math.sin(B) / AO4);
                     A = Math.PI - B - O4; // angle from horizontal
 
                     var dataNow = {};
@@ -365,11 +453,25 @@
                     //acceleration vector for wiper
                     this.save();
                         this.translate(pivot_right);
-                        this.arrow(dataWiper.C, dataWiper.C.add(dataWiper.ddiff.C.x(1/scaling_factor)), "acceleration");
+                        //net acc
+                        this.arrow(dataWiper.C, dataWiper.C.add(dataWiper.ddiff.C.x(1/scaling_factor)), "rotation");
+
+                        var unit_vec_O4C = dataWiper.C.x(1/O4C);
+                        this.save();
+                        this.setProp("arrowLineWidthPx", 1.5);
+                        //centripetal acc
+                        this.arrow(dataWiper.C, dataWiper.C.x((O4C + dataWiper.ddiff.C.x(1/scaling_factor).dot(unit_vec_O4C))/O4C), "acceleration");
+                        //tangential acc
+                        this.arrow(dataWiper.C, dataWiper.C.add(dataWiper.ddiff.C.x(1/scaling_factor).subtract(unit_vec_O4C.x(dataWiper.ddiff.C.x(1/scaling_factor).dot(unit_vec_O4C)))), "acceleration");
+                        this.restore();
                     this.restore();
                 }
 
+                document.getElementById('cent_val').innerHTML = `${Math.abs(dataWiper.ddiff.C.dot(dataWiper.C.x(1/O4C)).toFixed(1))} m/s<sup>2</sup>`;
+                document.getElementById('tan_val').innerHTML = `${dataWiper.ddiff.C.subtract(dataWiper.C.x(1/O4C).x(dataWiper.ddiff.C.dot(dataWiper.C.x(1/O4C)))).modulus().toFixed(1)} m/s<sup>2</sup>`;
+
                 temp_time++;
+                time = t;
             });
 
 
@@ -439,6 +541,10 @@
                 animPD.stopAnim();
 
                 temp_time = 0;
+                time = 0; 
+                flag = 0;
+                O2 = 0;
+                teta = 0;
                 path_points_above = [];
                 path_points_below = [];
 
@@ -469,6 +575,9 @@
             }
 
             function setOmega(value){
+                temp_time = 0;
+                path_points_above = [];
+                path_points_below = [];
                 if(!animPD._running){
                     animPD.startAnim();
                     omega = document.getElementById('omegaslider').value;

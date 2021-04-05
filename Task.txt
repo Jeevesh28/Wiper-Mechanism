@@ -1,8 +1,10 @@
 ! - represents priority
 
-
+Done:
 1. add a static photo with labels for each bar for a guide to user !
 2. centripetal acc and tangential acc can be shown sepearately for better visual !!
+
+To do:
 3. (Aritra) See about force and torque thing !!!!!!!!!!
 4. velcity vs time graph !!!!!!!!!
 5. acc vs time graph    !!!!!!!!!!!
