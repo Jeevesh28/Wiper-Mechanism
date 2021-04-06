@@ -32,6 +32,8 @@
             }
             canvas {
                 border: 1px solid black;
+                width: 690px;
+                height: 1000px;
             }
             label {
                 width: 155px;
@@ -61,8 +63,11 @@
             #msg {
                 color: red;
                 text-align: center;
-                margin-left: -120px;
+                height: 23.5px;
 
+            }
+            hr{
+                margin-bottom: 5px;
             }
         </style>      
     </head>
@@ -72,18 +77,18 @@
         <div class="container mx-5 pb-5">
             <div class="row">
                 <div class="col-xl-7 col-md-12">
-                    <canvas id="wiper" width="630" height="630"></canvas>
-                    <div id="msg"></div>
+                    <canvas id="wiper" width="690" height="1000"></canvas>
                 </div>
                 <div class="col-xl-5 col-md-12">
                     <div class="row">
                         <div class="text-center">
                             <button id="animation" class="btn btn-success my-2 w-50 mx-2" onclick="animPD.toggleAnim(); update_butt();">Start animation</button>
                             <button class="btn btn-warning w-25 my-2 mx-2" onclick="reset();">Reset</button>
+                            <div id="msg"></div>
                         </div>
                     </div>
 
-                    <hr>
+                    <hr class="mt-0">
 
                     <div class="row">
                         <div class="col-xl-12 col-md-12">
@@ -225,8 +230,8 @@
             animPD = new PrairieDrawAnim("wiper", function(t) {
 
                 //SET UP PRAIRIEDRAW
-                this.setUnits(10, 10);
-                this.translate($V([0,-0.5]));
+                this.setUnits(10, 15);
+                this.translate($V([0,1.5]));
                 this.setProp("arrowLineWidthPx",3);
                 this.addOption("velocity",false);
                 this.addOption("acceleration",false);
@@ -483,39 +488,52 @@
                 document.getElementById('cent_val').innerHTML = `${Math.abs(dataWiper.ddiff.C.dot(dataWiper.C.x(1/O4C)).toFixed(1))} m/s<sup>2</sup>`;
                 document.getElementById('tan_val').innerHTML = `${dataWiper.ddiff.C.subtract(dataWiper.C.x(1/O4C).x(dataWiper.ddiff.C.dot(dataWiper.C.x(1/O4C)))).modulus().toFixed(1)} m/s<sup>2</sup>`;
 
+
+                var maxtime = 10; // Math.abs(2*Math.PI/omega) + 0.05;
+                /*******************************/
+                var speedMax = 10;// to be calculated
+                var accMax =20;// to be calculated
+                /*******************************/
+                var speedHistory = this.history("speed", 0.05, maxtime, t, dataWiper.diff.C.modulus().toFixed(2));            
+                var accHistory = this.history("acc", 0.05, maxtime, t, dataWiper.ddiff.C.modulus().toFixed(1));
+
+                this.plotHistory($V([-4.6, -5.5]), $V([9.5, 2]), $V([maxtime, 1.8 * speedMax]), Math.min(t, 0.95 * maxtime), "|v|", speedHistory, "velocity");
+                this.plotHistory($V([-4.6, -8.2]), $V([9.5, 2]), $V([maxtime, 1.8 * accMax]), Math.min(t, 0.95 * maxtime), "|a|", accHistory, "rotation");
+        
+
                 temp_time++;
                 time = t;
             });
 
 
-            function check_grashofsLaw(){
-                var bars = [length_motor_bar, length_coupler_bar, length_rocker_bar, length_base];
-                bars.sort();
-                var leftSide = (parseFloat(bars[0]) + parseFloat(bars[3])).toFixed(4); // lmin + lmax
-                var rightSide = (parseFloat(bars[1]) + parseFloat(bars[2])).toFixed(4);// p + q
+            // function check_grashofsLaw(){
+            //     var bars = [length_motor_bar, length_coupler_bar, length_rocker_bar, length_base];
+            //     bars.sort();
+            //     var leftSide = (parseFloat(bars[0]) + parseFloat(bars[3])).toFixed(4); // lmin + lmax
+            //     var rightSide = (parseFloat(bars[1]) + parseFloat(bars[2])).toFixed(4);// p + q
                 
-                if(leftSide <= rightSide) // grashof true
-                {
-                    if(bars[0] == length_base) // when lmin is the base - double-crank
-                    {
-                    }
-                    else if(bars[3] == length_base)// when lmax is the base - rank-rocker
-                    {
-                        if(bars[0] != length_motor_bar) // and motor_bar is NOT the lmin
-                        {
-                            omega = omega*-1;
-                        }
-                    }
-                    else if(true)
-                    {
+            //     if(leftSide <= rightSide) // grashof true
+            //     {
+            //         if(bars[0] == length_base) // when lmin is the base - double-crank
+            //         {
+            //         }
+            //         else if(bars[3] == length_base)// when lmax is the base - rank-rocker
+            //         {
+            //             if(bars[0] != length_motor_bar) // and motor_bar is NOT the lmin
+            //             {
+            //                 omega = omega*-1;
+            //             }
+            //         }
+            //         else if(true)
+            //         {
                         
-                    }
-                }
-                else // non-grashof - double-rocker
-                {
-                    omega = omega*-1;
-                }
-            }
+            //         }
+            //     }
+            //     else // non-grashof - double-rocker
+            //     {
+            //         omega = omega*-1;
+            //     }
+            // }
 
             function update_butt()
             {

@@ -3345,7 +3345,7 @@ PrairieDraw.prototype.plotHistory = function(originDw, sizeDw, sizeData, timeOff
     this.setProp("arrowheadLengthRatio", 11);
     this.arrow($V([0, 0]), $V([sizeDw.e(1), 0]));
     this.arrow($V([0, 0]), $V([0, sizeDw.e(2)]));
-    this.text($V([sizeDw.e(1), 0]), $V([1, 1.5]), "TEX:$t$");
+    this.text($V([sizeDw.e(1), 0]), $V([1, 1.5]), "t");
     this.text($V([0, sizeDw.e(2)]), $V([1.5, 1]), yLabel);
     this.restore();
     var col = this._getColorProp(type);

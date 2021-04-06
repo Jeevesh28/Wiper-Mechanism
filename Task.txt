@@ -1,4 +1,4 @@
-3. (Aritra) See about force and torque thing !!!!!!!!!!
+- (Aritra) See about force and torque thing !!!!!!!!!!
 
 You may consider some load (moment) due to friction force (constant) on the wiper blades.
 Note that the wiper blades press down on the windscreen with almost a constant force at
@@ -8,13 +8,13 @@ all configurations.
 
 
 Done:
-1. add a static photo with labels for each bar for a guide to user !
+- add a static photo with labels for each bar for a guide to user !
 
 To do:
 
-4. velcity vs time graph !!!!!!!!!
-5. acc vs time graph    !!!!!!!!!!!
-6. CORRECT code for the motor to reverse direction when motor bar becomes a rocker (bcz oflength changes)- 
-7. complete check_grashofsLaw() func
-8. resolve that 2 points not coming on changing wiper bar length
-9. add content to i buttons where ever necessary.  
+- caculate maxvel and max acc for graphs
+- CORRECT code for the motor to reverse direction when motor bar becomes a rocker (bcz oflength changes)- 
+
+- resolve that 2 points not coming on changing wiper bar length
+- add content to i buttons where ever necessary.  
+- complete check_grashofsLaw() func
