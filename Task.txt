@@ -1,13 +1,20 @@
-! - represents priority
+3. (Aritra) See about force and torque thing !!!!!!!!!!
+
+You may consider some load (moment) due to friction force (constant) on the wiper blades.
+Note that the wiper blades press down on the windscreen with almost a constant force at
+all configurations.
+
+-Anirvan DasGupta.
+
 
 Done:
 1. add a static photo with labels for each bar for a guide to user !
-2. centripetal acc and tangential acc can be shown sepearately for better visual !!
 
 To do:
-3. (Aritra) See about force and torque thing !!!!!!!!!!
+
 4. velcity vs time graph !!!!!!!!!
 5. acc vs time graph    !!!!!!!!!!!
-6. add code for the motor to reverse direction when motor bar becomes a rocker (bcz oflength changes)- complete check_grashofsLaw() func
-7. resolve that 2 points not coming on changing wiper bar length
-8. add content to i buttons where ever necessary.  
+6. CORRECT code for the motor to reverse direction when motor bar becomes a rocker (bcz oflength changes)- 
+7. complete check_grashofsLaw() func
+8. resolve that 2 points not coming on changing wiper bar length
+9. add content to i buttons where ever necessary.  

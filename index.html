@@ -58,15 +58,22 @@
                 color: aliceblue;
                 background-color: rgba(0, 0, 0, 0.473);
             }
+            #msg {
+                color: red;
+                text-align: center;
+                margin-left: -120px;
+
+            }
         </style>      
     </head>
     <body>
         <a target="_blank" class="github-fork-ribbon" href="https://github.com/jatin-47/Wiper-Mechanism" data-ribbon="Star me on GitHub" title="Fork me on GitHub">Star me on GitHub</a>
         <h1 class="display-6 text-center bg-info bg-gradient py-1 fw-normal" style="margin-bottom: 30px;">Wiper Mechanism Simulation</h1>
-        <div class="container mx-5 pb-4">
+        <div class="container mx-5 pb-5">
             <div class="row">
                 <div class="col-xl-7 col-md-12">
-                    <canvas id="wiper" width="600" height="600"></canvas>
+                    <canvas id="wiper" width="630" height="630"></canvas>
+                    <div id="msg"></div>
                 </div>
                 <div class="col-xl-5 col-md-12">
                     <div class="row">
@@ -212,9 +219,6 @@
             var length_wiper_bar = 2;	
             var length_base = Math.sqrt(pivot_motor.e(1)*pivot_motor.e(1) + pivot_motor.e(2)*pivot_motor.e(2));
 
-            var sum = length_coupler_bar + length_rocker_bar;
-            var modsum = sum - 0.03;
-
             document.getElementById('base_bar').value = length_base;
             document.getElementById("base_bar_val").innerHTML = `${length_base.toFixed(2)} m`;
 
@@ -246,7 +250,7 @@
                 var O2O4A = Math.asin(O2A * Math.sin(O2) / AO4);
                 var AO4B = Math.asin(AB * Math.sin(B) / AO4);
                 var O4 = O2O4A + AO4B;
-                var A = Math.PI - B - O4; // angle from horizontal
+                var A = 2*Math.PI - B - O4 - O2; 
 
                 //getting difference of max and min values of angle O4 for area calculation
                 if(O4 >= maxO4)
@@ -271,17 +275,26 @@
                 }
 
                 //handling When motor is a ROCKER
-                sum =  parseFloat(AB + BO4);
-                modsum =  parseFloat(sum - 0.03);
+                var sum =  (parseFloat(AB)+ parseFloat(BO4) - parseFloat(0.02)).toFixed(2);
 
-                if( AO4.toFixed(2) >= modsum.toFixed(2) && flag == 0) // && o2 is not odd multiple of pi
+                if( parseFloat(AO4).toFixed(2) >= sum && flag == 0) // && o2 is not odd multiple of pi
                 {
                     flag = 1;
-                    omega = omega*-1;                    
+                    omega = omega*-1;      
+                    document.getElementById('omegaslider').value = omega;
+                    setOmega();              
                 }
-                else if( AO4.toFixed(2) < sum.toFixed(2))
+                else if( parseFloat(AO4).toFixed(2) < sum)
                 {
                     flag = 0;
+                }
+                if( sum < (parseFloat(O4O2)+ parseFloat(O2A)).toFixed(2) )
+                {
+                    document.getElementById("msg").innerHTML = "Motor can't rotate completely! Change bar lengths.";
+                }
+                else
+                {
+                    document.getElementById("msg").innerHTML = "";
                 }
                 
 
@@ -318,13 +331,13 @@
 
                 //COUPLER BAR
                 this.translate($V([O2A,0]));
-                this.rotate(A-O2); 	//"undo" the previous rotation
+                this.rotate(-(Math.PI-A)); 	
                 this.rod($V([0,0]), $V([AB,0]), 0.2);
                 this.point($V([0,0]));
                 
                 //ROCKER BAR
                 this.translate($V([AB,0]));
-                this.rotate(-(A + O4));
+                this.rotate(-(Math.PI-B));
                 this.rod($V([0,0]), $V([BO4,0]), 0.2);
                 this.point($V([0,0]));
 
@@ -414,7 +427,7 @@
                     AO4 = Math.sqrt(O2A*O2A + O4O2*O4O2 - 2*O2A*O4O2*Math.cos(teta));
                     B = Math.acos((BO4*BO4 + AB*AB - AO4*AO4)/(2*BO4*AB));
                     O4 = Math.asin(O2A * Math.sin(teta) / AO4) + Math.asin(AB * Math.sin(B) / AO4);
-                    A = Math.PI - B - O4; // angle from horizontal
+                    A = 2*Math.PI - B - O4 - O2;
 
                     var dataNow = {};
                     dataNow.C = this.vector2DAtAngle(ref_angle-O4 + delta_angle).x(O4C);
