@@ -280,19 +280,21 @@
                 }
 
                 //handling When motor is a ROCKER
-                var sum =  (parseFloat(AB)+ parseFloat(BO4) - parseFloat(0.02)).toFixed(2);
+                var sum =  (parseFloat(AB) + parseFloat(BO4) - parseFloat(0.02)).toFixed(2);
+                var diff = Math.abs((parseFloat(AB) - parseFloat(BO4) + parseFloat(0.02)).toFixed(2));
 
-                if( parseFloat(AO4).toFixed(2) >= sum && flag == 0) // && o2 is not odd multiple of pi
+                if( (parseFloat(AO4).toFixed(2) >= sum || parseFloat(AO4).toFixed(2) <= diff ) && flag == 0) // && o2 is not odd multiple of pi
                 {
                     flag = 1;
                     omega = omega*-1;      
                     document.getElementById('omegaslider').value = omega;
                     setOmega();              
                 }
-                else if( parseFloat(AO4).toFixed(2) < sum)
+                else if(parseFloat(AO4).toFixed(2) < sum && parseFloat(AO4).toFixed(2) > diff )
                 {
                     flag = 0;
                 }
+
                 if( sum < (parseFloat(O4O2)+ parseFloat(O2A)).toFixed(2) )
                 {
                     document.getElementById("msg").innerHTML = "Motor can't rotate completely! Change bar lengths.";
@@ -491,8 +493,24 @@
 
                 var maxtime = 10; // Math.abs(2*Math.PI/omega) + 0.05;
                 /*******************************/
-                var speedMax = 10;// to be calculated
+                var speedMax = 10;
                 var accMax =20;// to be calculated
+
+                if(dataWiper.diff.C.modulus().toFixed(2) >= speedMax)
+                {
+                    speedMax = dataWiper.diff.C.modulus().toFixed(2);
+                }
+                if(dataWiper.ddiff.C.modulus().toFixed(1) >= accMax)
+                {
+                    if(dataWiper.ddiff.C.modulus().toFixed(1) > 100)
+                    {
+                        accMax = 100;
+                    }
+                    else
+                    {
+                        accMax = dataWiper.ddiff.C.modulus().toFixed(1);
+                    }
+                }
                 /*******************************/
                 var speedHistory = this.history("speed", 0.05, maxtime, t, dataWiper.diff.C.modulus().toFixed(2));            
                 var accHistory = this.history("acc", 0.05, maxtime, t, dataWiper.ddiff.C.modulus().toFixed(1));
