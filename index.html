@@ -215,6 +215,10 @@
             var path_points_below = [];
             var maxO4 = 0;
             var minO4 = 0;
+
+            var speedMax = 0;
+            var accMax =0;
+            
             //Bar lengths
             var length_motor_bar = 0.6;
             var length_coupler_bar = 2.8;
@@ -262,6 +266,7 @@
                 {
                     maxO4 = O4;
                 }
+                console.log("maxO4 " + maxO4);
                 if(O4 <= minO4)
                 {
                     minO4 = O4;
@@ -491,70 +496,26 @@
                 document.getElementById('tan_val').innerHTML = `${dataWiper.ddiff.C.subtract(dataWiper.C.x(1/O4C).x(dataWiper.ddiff.C.dot(dataWiper.C.x(1/O4C)))).modulus().toFixed(1)} m/s<sup>2</sup>`;
 
 
-                var maxtime = 10; // Math.abs(2*Math.PI/omega) + 0.05;
-                /*******************************/
-                var speedMax = 10;
-                var accMax =110;// to be calculated
+                var maxtime = 10; 
+                
+                if( Math.round(dataWiper.diff.C.modulus()) >= speedMax)
+                {
+                    speedMax = Math.round(dataWiper.diff.C.modulus());
+                }
+                if( Math.round(dataWiper.ddiff.C.modulus()) >= accMax)
+                {
+                    accMax = Math.round(dataWiper.ddiff.C.modulus());
+                }
+                
+                var speedHistory = this.history("speed", 0.04, maxtime, t, dataWiper.diff.C.modulus().toFixed(2));            
+                var accHistory = this.history("acc", 0.04, maxtime, t, dataWiper.ddiff.C.modulus().toFixed(1));
 
-                // if(t<5)
-                // {
-                //     if(dataWiper.diff.C.modulus().toFixed(2) >= speedMax)
-                //     {
-                //         speedMax = dataWiper.diff.C.modulus().toFixed(2);
-                //     }
-                //     if(dataWiper.ddiff.C.modulus().toFixed(1) >= accMax)
-                //     {
-                //         if(dataWiper.ddiff.C.modulus().toFixed(1) > 10000000)
-                //         {
-                //             accMax = 10000000;
-                //         }
-                //         else
-                //         {
-                //             accMax = dataWiper.ddiff.C.modulus().toFixed(1);
-                //         }
-                //     }
-                // }
-                /*******************************/
-                var speedHistory = this.history("speed", 0.05, maxtime, t, dataWiper.diff.C.modulus().toFixed(2));            
-                var accHistory = this.history("acc", 0.05, maxtime, t, dataWiper.ddiff.C.modulus().toFixed(1));
-
-                this.plotHistory($V([-4.6, -5.5]), $V([9.5, 2]), $V([maxtime, 1.8 * speedMax]), Math.min(t, 0.95 * maxtime), "|v|", speedHistory, "velocity");
-                this.plotHistory($V([-4.6, -8.2]), $V([9.5, 2]), $V([maxtime, 1.8 * accMax]), Math.min(t, 0.95 * maxtime), "|a|", accHistory, "rotation");
-        
-
+                this.plotHistory($V([-4.6, -5.5]), $V([9.5, 2]), $V([maxtime, 1.5 * speedMax]), Math.min(t, 0.95 * maxtime), "|v|", speedHistory, "velocity");
+                this.plotHistory($V([-4.6, -8.2]), $V([9.5, 2]), $V([maxtime, 1.5 * accMax]), Math.min(t, 0.95 * maxtime), "|a|", accHistory, "rotation");            
+               
                 temp_time++;
                 time = t;
             });
-
-
-            // function check_grashofsLaw(){
-            //     var bars = [length_motor_bar, length_coupler_bar, length_rocker_bar, length_base];
-            //     bars.sort();
-            //     var leftSide = (parseFloat(bars[0]) + parseFloat(bars[3])).toFixed(4); // lmin + lmax
-            //     var rightSide = (parseFloat(bars[1]) + parseFloat(bars[2])).toFixed(4);// p + q
-                
-            //     if(leftSide <= rightSide) // grashof true
-            //     {
-            //         if(bars[0] == length_base) // when lmin is the base - double-crank
-            //         {
-            //         }
-            //         else if(bars[3] == length_base)// when lmax is the base - rank-rocker
-            //         {
-            //             if(bars[0] != length_motor_bar) // and motor_bar is NOT the lmin
-            //             {
-            //                 omega = omega*-1;
-            //             }
-            //         }
-            //         else if(true)
-            //         {
-                        
-            //         }
-            //     }
-            //     else // non-grashof - double-rocker
-            //     {
-            //         omega = omega*-1;
-            //     }
-            // }
 
             function update_butt()
             {
@@ -599,6 +560,10 @@
                 teta = 0;
                 path_points_above = [];
                 path_points_below = [];
+                maxO4 = 0;
+                minO4 = 0;
+                speedMax = 0;
+                accMax =0;
 
                 omega = 2;
                 delta_angle = (Math.PI/180)*10;
@@ -628,6 +593,9 @@
 
             function setOmega(value){
                 temp_time = 0;
+                speedMax = 0;
+                accMax =0;
+
                 path_points_above = [];
                 path_points_below = [];
                 if(!animPD._running){
@@ -644,6 +612,11 @@
 
             function setdelta(value){
                 temp_time = 0;
+                maxO4 = 0;
+                minO4 = 0;
+                speedMax = 0;
+                accMax =0;
+
                 path_points_above = [];
                 path_points_below = [];
                 if(!animPD._running){
@@ -660,6 +633,11 @@
 
             function setmotor(value){
                 temp_time = 0;
+                maxO4 = 0;
+                minO4 = 0;
+                speedMax = 0;
+                accMax =0;
+
                 path_points_above = [];
                 path_points_below = [];
                 if(!animPD._running){
@@ -675,6 +653,11 @@
             }
             function setcoupler(value){
                 temp_time = 0;
+                maxO4 = 0;
+                minO4 = 0;
+                speedMax = 0;
+                accMax =0;
+
                 path_points_above = [];
                 path_points_below = [];
                 if(!animPD._running){
@@ -690,6 +673,11 @@
             }
             function setoutput(value){
                 temp_time = 0;
+                maxO4 = 0;
+                minO4 = 0;
+                speedMax = 0;
+                accMax =0;
+
                 path_points_above = [];
                 path_points_below = [];
                 if(!animPD._running){
@@ -706,6 +694,11 @@
 
             function setwiper(){
                 temp_time = 0;
+                maxO4 = 0;
+                minO4 = 0;
+                speedMax = 0;
+                accMax =0;
+
                 path_points_above = [];
                 path_points_below = [];
                 if(!animPD._running){
