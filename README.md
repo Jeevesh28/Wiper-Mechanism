@@ -11,3 +11,4 @@ See the userManual.html in the User Manual folder, or use the JsDoc toolkit to g
 
 ## Screenshots: :camera:
 <img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/Images/ss1.png" alt="SS1" width="800">
+<img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/Images/ss2.png" alt="SS2" width="800">
