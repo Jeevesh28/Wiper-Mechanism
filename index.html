@@ -494,23 +494,26 @@
                 var maxtime = 10; // Math.abs(2*Math.PI/omega) + 0.05;
                 /*******************************/
                 var speedMax = 10;
-                var accMax =20;// to be calculated
+                var accMax =110;// to be calculated
 
-                if(dataWiper.diff.C.modulus().toFixed(2) >= speedMax)
-                {
-                    speedMax = dataWiper.diff.C.modulus().toFixed(2);
-                }
-                if(dataWiper.ddiff.C.modulus().toFixed(1) >= accMax)
-                {
-                    if(dataWiper.ddiff.C.modulus().toFixed(1) > 1000)
-                    {
-                        accMax = 1000;
-                    }
-                    else
-                    {
-                        accMax = dataWiper.ddiff.C.modulus().toFixed(1);
-                    }
-                }
+                // if(t<5)
+                // {
+                //     if(dataWiper.diff.C.modulus().toFixed(2) >= speedMax)
+                //     {
+                //         speedMax = dataWiper.diff.C.modulus().toFixed(2);
+                //     }
+                //     if(dataWiper.ddiff.C.modulus().toFixed(1) >= accMax)
+                //     {
+                //         if(dataWiper.ddiff.C.modulus().toFixed(1) > 10000000)
+                //         {
+                //             accMax = 10000000;
+                //         }
+                //         else
+                //         {
+                //             accMax = dataWiper.ddiff.C.modulus().toFixed(1);
+                //         }
+                //     }
+                // }
                 /*******************************/
                 var speedHistory = this.history("speed", 0.05, maxtime, t, dataWiper.diff.C.modulus().toFixed(2));            
                 var accHistory = this.history("acc", 0.05, maxtime, t, dataWiper.ddiff.C.modulus().toFixed(1));
