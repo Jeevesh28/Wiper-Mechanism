@@ -29,3 +29,4 @@ See the [userManual.html](https://jatin-47.github.io/Wiper-Mechanism/User%20Manu
 
 ## Screenshots: 📷
 <img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/Images/ss1.png" alt="SS1" width="1000">
+<img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/Images/labelled.png" align="center" width="300" >
