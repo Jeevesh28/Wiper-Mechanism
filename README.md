@@ -19,7 +19,6 @@ A simple JavaScript library called [``PrairieDraw.js``](https://prairielearn.rea
 - PrairieDraw Repo :- [martin70/PrairieDraw.js](https://github.com/martin70/PrairieDraw.js)
 
 See the [userManual.html](https://jatin-47.github.io/Wiper-Mechanism/User%20Manual/userManual.html) in the User Manual folder, or use the JsDoc toolkit to generate the documentation with the included Makefile.
-<br><br>
 
 ## Instructions: 🎮
 - Adjust the parameters to the values you want and then click "Start Animation" button.
