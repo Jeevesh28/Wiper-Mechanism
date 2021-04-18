@@ -67,7 +67,7 @@ animPD = new PrairieDrawAnim("wiper", function(t) {
     {
         maxO4 = O4;
     }
-    console.log("maxO4 " + maxO4);
+    //console.log("maxO4 " + maxO4);
     if(O4 <= minO4)
     {
         minO4 = O4;
