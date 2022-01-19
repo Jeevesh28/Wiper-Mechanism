@@ -2,7 +2,7 @@
 <img src="https://github.com/jatin-47/Wiper-Mechanism/blob/main/Images/title.gif" align="right" style="display:inline;" width="380" >
 
 Simulator for a **4-bar wiper mechanism** with motion analysis and UI for user to change parameters.<br>
-[https://jatin-47.github.io/Wiper-Mechanism/index.html](https://jatin-47.github.io/Wiper-Mechanism/index.html)
+[https://jeevesh28.github.io/Wiper-Mechanism/index.html](https://jeevesh28.github.io/Wiper-Mechanism/index.html)
 
 ## Features: ✨
 1. Smooth real-time simulation using JavaScript.
