@@ -4,14 +4,14 @@
 Simulator for a **4-bar wiper mechanism** with motion analysis and UI for user to change parameters.<br>
 [https://jatin-47.github.io/Wiper-Mechanism/index.html](https://jatin-47.github.io/Wiper-Mechanism/index.html)
 
-### Features: ✨
+## Features: ✨
 1. Smooth real-time simulation using JavaScript.
 2. Real-time parameter adjustments possible.
 3. Graphs for speed vs time and mod acceleration vs time.
 4. Toogle buttons for velocity and acceleration vectors.
 5. Data for area wiped, velocity, acceleration and its components. 
 
-### Libraries Used: 📚
+## Libraries Used: 📚
 A simple JavaScript library called [``PrairieDraw.js``](https://prairielearn.readthedocs.io/en/latest/PrairieDraw/) is used for drawing technical diagrams and animations on an HTML5 canvas. <br>
 ``PrairieDraw.js`` uses the Sylvester.Vector class of [``Sylvester.js``](http://sylvester.jcoglan.com/docs.html) library to specify positions and directions for the drawing.
 <br>
